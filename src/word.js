@@ -1,0 +1,148 @@
+import * as game from 'game'
+import * as vec2 from 'vector2'
+import * as soundmanager from 'soundmanager'
+import Thing from 'thing'
+
+const LETTER_SPACING = 26
+const LETTER_SIZE = 32
+const REPEL_DISTANCE = 120
+const REPEL_FORCE = 0.0002
+const FRICTION = 0.03
+const DRIFT_FORCE = 0.004
+const DRIFT_CHANGE_RATE = 180
+const DRIFT_CHANGE_RATE_VARIANCE = 100
+
+export default class Word extends Thing {
+  word = "zyxzyxzyx"
+  position = [0, 0]
+  originalPosition = [0, 0]
+  selectedPosition = [0, 0]
+  velocity = [0, 0]
+  driftDirection = [0, 0]
+  driftChangeTime = 0
+  isBeingDragged = false
+  isHighlighted = false
+  mustReturnToOriginalPosition = false
+  dragTime = 0
+
+  constructor(word, position) {
+    super()
+
+    this.word = word
+    this.position = position
+  }
+
+  getSize() {
+    return [LETTER_SIZE + ((this.word.length - 1) * LETTER_SPACING), LETTER_SIZE]
+  }
+
+  getAabb() {
+    const size = this.getSize();
+    return [
+      this.position[0] - size[0] / 2,
+      this.position[1] - size[1] / 2,
+      this.position[0] + size[0] / 2,
+      this.position[1] + size[1] / 2,
+    ]
+  }
+
+  distanceToOtherWord(word) {
+    const box1 = this.getAabb()
+    const box2 = word.getAabb()
+
+    const xSep = Math.max(0, Math.max(box1[0] - box2[2], box2[0] - box1[2]));
+    const ySep = Math.max(0, Math.max(box1[1] - box2[3], box2[1] - box1[3]));
+    
+    if (xSep > 0 && ySep > 0) {
+        return Math.sqrt(xSep ** 2 + ySep ** 2);
+    }
+    return Math.max(xSep, ySep);
+  }
+
+  update() {
+    if (this.isBeingDragged) {
+      this.dragTime ++
+    }
+    else {
+      this.dragTime = 0
+    }
+
+    if (this.isSelected) {
+      this.position = vec2.lerp(this.position, this.selectedPosition, 0.1)
+      this.mustReturnToOriginalPosition = true
+      this.velocity = [0, 0]
+    }
+    else if (this.isBeingDragged) {
+      const prevPosition = [...this.position]
+
+      if (game?.mouse?.position) {
+        this.position = vec2.lerp(this.position, vec2.add(game.mouse.position, [0, 0]), 0.1)
+      }
+
+      this.velocity = vec2.subtract(this.position, prevPosition)
+      this.mustReturnToOriginalPosition = false
+    }
+    else {
+      if (vec2.distance(this.position, this.originalPosition) < 1) {
+        this.mustReturnToOriginalPosition = false
+      }
+
+      if (this.mustReturnToOriginalPosition) {
+        this.position = vec2.lerp(this.position, this.originalPosition, 0.1)
+      }
+      else {
+        this.driftChangeTime --
+        if (this.driftChangeTime <= 0) {
+          this.driftChangeTime = DRIFT_CHANGE_RATE + (DRIFT_CHANGE_RATE_VARIANCE * Math.random()) - (DRIFT_CHANGE_RATE_VARIANCE / 2)
+          const angle = Math.random() * 2 * Math.PI
+          this.driftDirection = vec2.angleToVector(angle)
+        }
+
+        this.velocity = vec2.add(this.velocity, vec2.scale(this.driftDirection, DRIFT_FORCE))
+
+        this.velocity = vec2.scale(this.velocity, 1.0 - FRICTION)
+
+        for (const word of game.getThings().filter(x => x instanceof Word && this !== x)) {
+          const dist = this.distanceToOtherWord(word)
+
+          if (dist < REPEL_DISTANCE) {
+            const dir = vec2.normalize(vec2.subtract(this.position, word.position))
+
+            let velocityDelta = vec2.scale(dir, (REPEL_DISTANCE - dist) * REPEL_FORCE)
+            if (dist === 0) {
+              velocityDelta = vec2.scale(velocityDelta, 2)
+            }
+            this.velocity = vec2.add(this.velocity, velocityDelta)
+          }
+        }
+
+        this.position = vec2.add(this.position, this.velocity)
+        this.originalPosition = [...this.position]
+      }
+    }
+  }
+
+  draw() {
+    const { ctx } = game
+    
+    ctx.save()
+    
+    ctx.translate(...this.position)
+    ctx.translate(...vec2.scale(this.getSize(), -0.5))
+
+    if (this.isSelected) {
+      ctx.filter = 'brightness(0) invert(1) sepia(1) saturate(50) hue-rotate(0deg)';
+    }
+    else if (this.isHighlighted || this.isBeingDragged) {
+      ctx.filter = 'brightness(0) invert(1) sepia(1) saturate(10) hue-rotate(0deg)';
+    }
+
+    for (const char of this.word) {
+      const img = game.assets.images["letter_" + char]
+      ctx.drawImage(img, 0, 0)
+      ctx.translate(LETTER_SPACING, 0)
+    }
+
+    ctx.restore()
+  }
+}
