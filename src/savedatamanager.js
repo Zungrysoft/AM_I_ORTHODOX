@@ -11,7 +11,7 @@ export default class SaveDataManager extends Thing {
 
     game.setThingName(this, 'saveDataManager')
 
-    this.wordProgress = game.assets.data.words
+    this.readFromLocalStorage()
 
     for (const word in this.wordProgress) {
       if (this.wordProgress[word] === 0) {
@@ -60,10 +60,39 @@ export default class SaveDataManager extends Thing {
         }
       }
 
+      this.writeToLocalStorage()
+
       return ret
     }
   }
 
+  writeToLocalStorage() {
+    localStorage.setItem('wordProgress', JSON.stringify(this.wordProgress));
+    localStorage.setItem('receivedAnswers', JSON.stringify(this.receivedAnswers));
+  }
+
+  readFromLocalStorage() {
+    const readWordProgress = JSON.parse(localStorage.getItem('wordProgress'));
+    const readReceivedAnswers = JSON.parse(localStorage.getItem('receivedAnswers'));
+
+    if (readWordProgress != null && readReceivedAnswers != null) {
+      this.wordProgress = readWordProgress;
+      this.receivedAnswers = readReceivedAnswers;
+    }
+    else {
+      this.resetLocalStorage()
+    }
+  }
+
+  resetLocalStorage() {
+    this.wordProgress = game.assets.data.words
+    this.receivedAnswers = []
+  }
+
   update() {
+    if (game.keysDown.ShiftLeft && game.keysPressed.KeyP) {
+      localStorage.removeItem('wordProgress');
+      localStorage.removeItem('receivedAnswers');
+    }
   }
 }
