@@ -11,6 +11,7 @@ const FRICTION = 0.03
 const DRIFT_FORCE = 0.004
 const DRIFT_CHANGE_RATE = 180
 const DRIFT_CHANGE_RATE_VARIANCE = 100
+const BOUND_CORRECTION_FORCE = 0.02
 
 export default class Word extends Thing {
   word = "zyxzyxzyx"
@@ -79,6 +80,22 @@ export default class Word extends Thing {
         this.position = vec2.lerp(this.position, vec2.add(game.mouse.position, [0, 0]), 0.1)
       }
 
+      // Constrain to boundary area
+      const bounds = game.getThing('ui').wordBounds
+      const aabb = this.getAabb()
+      if (aabb[0] < bounds[0]) {
+        this.position[0] = bounds[0] + this.getSize()[0] / 2
+      }
+      if (aabb[2] > bounds[2]) {
+        this.position[0] = bounds[2] - this.getSize()[0] / 2
+      }
+      if (aabb[1] < bounds[1]) {
+        this.position[1] = bounds[1] + this.getSize()[1] / 2
+      }
+      if (aabb[3] > bounds[3]) {
+        this.position[1] = bounds[3] - this.getSize()[1] / 2
+      }
+
       this.velocity = vec2.subtract(this.position, prevPosition)
       this.mustReturnToOriginalPosition = false
     }
@@ -91,6 +108,22 @@ export default class Word extends Thing {
         this.position = vec2.lerp(this.position, this.originalPosition, 0.1)
       }
       else {
+        // Constrain to boundary area
+        const bounds = game.getThing('ui').wordBounds
+        const aabb = this.getAabb()
+        if (aabb[0] < bounds[0]) {
+          this.velocity[0] += (bounds[0] - aabb[0]) * BOUND_CORRECTION_FORCE
+        }
+        if (aabb[2] > bounds[2]) {
+          this.velocity[0] -= (aabb[2] - bounds[2]) * BOUND_CORRECTION_FORCE
+        }
+        if (aabb[1] < bounds[1]) {
+          this.velocity[1] += (bounds[1] - aabb[1]) * BOUND_CORRECTION_FORCE
+        }
+        if (aabb[3] > bounds[3]) {
+          this.velocity[1] -= (aabb[3] - bounds[3]) * BOUND_CORRECTION_FORCE
+        }
+
         this.driftChangeTime --
         if (this.driftChangeTime <= 0) {
           this.driftChangeTime = DRIFT_CHANGE_RATE + (DRIFT_CHANGE_RATE_VARIANCE * Math.random()) - (DRIFT_CHANGE_RATE_VARIANCE / 2)

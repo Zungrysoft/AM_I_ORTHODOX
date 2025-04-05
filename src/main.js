@@ -47,6 +47,9 @@ game.assets.images = await game.loadImages({
   symbol_question_mark: 'images/symbol_question_mark.png',
   ui_background: 'images/ui_background.png',
   ui_pan: 'images/ui_pan.png',
+  ui_send: 'images/ui_send.png',
+  ui_erase: 'images/ui_erase.png',
+  ui_lock: 'images/ui_lock.png',
 })
 
 game.assets.data = await game.loadJson({
