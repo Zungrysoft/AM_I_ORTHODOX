@@ -1,8 +1,12 @@
 {
     "where": 0,
+    "who": 0,
     "am": 0,
     "i": 0,
     "cave": 2,
-    "are": 1,
-    "we": 1
+    "are": 3,
+    "the": 1,
+    "is": 1,
+    "we": 5,
+    "arizona": 3
 }

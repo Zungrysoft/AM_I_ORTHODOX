@@ -49,13 +49,16 @@ export default class QuestionMark extends Thing {
     ctx.translate(...vec2.scale(this.getSize(), -0.5))
     ctx.translate(-20, 0)
 
-    if (this.isSelected && game.getThing('ui').errorTime > 0) {
-      ctx.filter = RED_ERROR;
-      const shake = game.getThing('ui').getErrorShake();
-      ctx.translate(shake, 0)
-    }
-    else {
-      ctx.filter = YELLOW_SELECTED;
+    ctx.filter = YELLOW_SELECTED;
+    if (this.isSelected) {
+      if (game.getThing('ui').errorTime > 0) {
+        ctx.filter = RED_ERROR;
+      }
+
+      if (game.getThing('ui').blockTime) {
+        const shake = game.getThing('ui').getBlockShake();
+        ctx.translate(shake, 0)
+      }
     }
 
     const img = game.assets.images["symbol_question_mark"]

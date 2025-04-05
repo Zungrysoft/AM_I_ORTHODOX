@@ -124,7 +124,7 @@ export default class Answer extends Thing {
     }
 
     // Sound effect
-    soundmanager.playSound('swoosh1', 0.6, 0.6)
+    soundmanager.playSound('swoosh1', 0.6, 0.5)
     if (timesSeen === 1) {
       soundmanager.playSound('unlock', 0.4, 1.1)
     }

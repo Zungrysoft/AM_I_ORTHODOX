@@ -73,6 +73,7 @@ game.assets.sounds = await game.loadAudio({
   newword1: 'sounds/newword1.wav',
   newword2: 'sounds/newword2.wav',
   error: 'sounds/error.wav',
+  block: 'sounds/block.wav',
 })
 soundmanager.setSoundsTable(game.assets.sounds)
 

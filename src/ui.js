@@ -9,6 +9,8 @@ import Answer from './answer.js'
 
 const BUTTON_MARGIN = 10
 const ERROR_DURATION = 25
+const BLOCK_DURATION = 15
+const MAX_WORDS = 6
 
 export default class UI extends Thing {
   sprite = 'ui_background'
@@ -16,6 +18,7 @@ export default class UI extends Thing {
   selectedWords = []
   wordBounds = [0, 0, game.getWidth(), game.getHeight() * 0.66]
   errorTime = 0
+  blockTime = 0
 
   constructor() {
     super()
@@ -47,6 +50,7 @@ export default class UI extends Thing {
 
   update() {
     this.errorTime --
+    this.blockTime --
 
     const allowActions = !game.getThings().some(x => x instanceof Answer && x.animationEvents.length > 0)
 
@@ -88,9 +92,15 @@ export default class UI extends Thing {
             soundmanager.playSound('swipe', 0.9, 0.6)
           }
           else {
-            this.selectedWords.push(activeWord)
-            soundmanager.playSound('swipe', 0.9, 1.0)
-            soundmanager.playSound('click1', 0.2, [0.6, 0.8])
+            if (this.selectedWords.length >= MAX_WORDS) {
+              soundmanager.playSound('block', 0.9, 1.0)
+              this.blockTime = BLOCK_DURATION
+            }
+            else {
+              this.selectedWords.push(activeWord)
+              soundmanager.playSound('swipe', 0.9, 1.0)
+              soundmanager.playSound('click1', 0.2, [0.6, 0.8])
+            }
           }
         }
       }
@@ -154,16 +164,17 @@ export default class UI extends Thing {
       }
       else {
         this.errorTime = ERROR_DURATION
+        this.blockTime = ERROR_DURATION
         soundmanager.playSound('error', 0.9, 0.8)
       }
     }
   }
 
-  getErrorShake() {
-    if (this.errorTime < 0) {
+  getBlockShake() {
+    if (this.blockTime < 0) {
       return 0;
     }
-    return (this.errorTime / ERROR_DURATION) * 10 * Math.sin(this.errorTime / 1.4)
+    return (this.blockTime / ERROR_DURATION) * 10 * Math.sin(this.blockTime / 1.4)
   }
 
   preDraw() {

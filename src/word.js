@@ -173,11 +173,14 @@ export default class Word extends Thing {
     if (this.isSelected) {
       if (game.getThing('ui').errorTime > 0) {
         ctx.filter = RED_ERROR;
-        const shake = game.getThing('ui').getErrorShake();
-        ctx.translate(shake, 0)
       }
       else {
         ctx.filter = YELLOW_SELECTED;
+      }
+
+      if (game.getThing('ui').blockTime > 0) {
+        const shake = game.getThing('ui').getBlockShake();
+        ctx.translate(shake, 0);
       }
     }
     else if (this.isHighlighted || this.isBeingDragged) {
