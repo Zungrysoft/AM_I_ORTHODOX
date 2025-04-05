@@ -49,7 +49,7 @@ export default class SaveDataManager extends Thing {
 
       this.receivedAnswers[answer] = 1
 
-      const words = answer.split(' ')
+      const words = answer.replaceAll(',', '').replaceAll('.', '').replaceAll('?', '').replaceAll('!', '').split(' ')
       for (const word of words) {
         if (this.wordProgress[word]) {
           this.wordProgress[word] -= 1

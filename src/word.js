@@ -7,7 +7,7 @@ import { RED_ERROR, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
 export const LETTER_SPACING = 26
 export const SPACE_BETWEEN_WORDS = 20
 export const LETTER_SIZE = 32
-export const REPEL_DISTANCE = 120
+export const REPEL_DISTANCE = 50
 export const REPEL_FORCE = 0.0002
 export const FRICTION = 0.03
 export const DRIFT_FORCE = 0.004
