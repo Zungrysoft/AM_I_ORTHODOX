@@ -2,8 +2,7 @@ import * as game from 'game'
 import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
-import { LETTER_SIZE, LETTER_SPACING, LINE_SPACING, SPACE_BETWEEN_WORDS } from './word.js'
-import { BLUE_LOCKED, GREY_OBTAINED } from './colors.js'
+import { BLUE_LOCKED } from './colors.js'
 
 export default class LockParticle extends Thing {
   velocity = [0, 0]
@@ -13,7 +12,7 @@ export default class LockParticle extends Thing {
 
     this.position = [...position]
     this.velocity = [
-      (Math.random() - 0.5) * 5,
+      (Math.random() - 0.5) * 10,
       -7 - (Math.random() * 2),
     ]
   }

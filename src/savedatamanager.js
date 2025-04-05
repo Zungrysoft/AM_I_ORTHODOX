@@ -37,12 +37,14 @@ export default class SaveDataManager extends Thing {
       return {
         progressed: [],
         unlocked: [],
+        timesSeen: this.receivedAnswers[answer] 
       }
     }
     else {
       let ret = {
         progressed: [],
         unlocked: [],
+        timesSeen: 1,
       }
 
       this.receivedAnswers[answer] = 1

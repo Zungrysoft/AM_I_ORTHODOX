@@ -29,11 +29,15 @@ export default class Word extends Thing {
   mustReturnToOriginalPosition = false
   dragTime = 0
 
-  constructor(word, position) {
+  constructor(word, position, originalPosition) {
     super()
 
     this.word = word
-    this.position = position
+    this.position = [...position]
+    if (originalPosition) {
+      this.originalPosition = [...originalPosition]
+      this.mustReturnToOriginalPosition = true
+    }
   }
 
   getSize() {

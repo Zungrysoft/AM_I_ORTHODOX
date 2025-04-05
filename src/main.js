@@ -56,10 +56,19 @@ game.assets.images = await game.loadImages({
 game.assets.data = await game.loadJson({
   answers: 'data/answers.json',
   words: 'data/words.json',
+  specialWords: 'data/specialwords.json',
 })
 
 game.assets.sounds = await game.loadAudio({
-  
+  click1: 'sounds/click1.wav',
+  swipe: 'sounds/swipe.wav',
+  swoosh1: 'sounds/swoosh1.wav',
+  unlock: 'sounds/unlock.wav',
+  break2: 'sounds/break2.wav',
+  impact1: 'sounds/impact1.wav',
+  newword1: 'sounds/newword1.wav',
+  newword2: 'sounds/newword2.wav',
+  error: 'sounds/error.wav',
 })
 soundmanager.setSoundsTable(game.assets.sounds)
 

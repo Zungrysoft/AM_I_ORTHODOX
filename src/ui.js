@@ -69,7 +69,11 @@ export default class UI extends Thing {
 
     // Update isHighlighted status for all words
     for (const word of this.getAllWords()) {
-      word.isHighlighted = word === activeWord
+      const shouldBeHighlighted = word === activeWord
+      if (!word.isHighlighted && shouldBeHighlighted && !word.isSelected) {
+        soundmanager.playSound('click1', 0.05, 1.8)
+      }
+      word.isHighlighted = shouldBeHighlighted
     }
 
     if (activeWord) {
@@ -81,9 +85,12 @@ export default class UI extends Thing {
         if (activeWord.dragTime < 15 && allowActions) {
           if (this.selectedWords.includes(activeWord)) {
             this.selectedWords = this.selectedWords.filter(x => x !== activeWord)
+            soundmanager.playSound('swipe', 0.9, 0.6)
           }
           else {
             this.selectedWords.push(activeWord)
+            soundmanager.playSound('swipe', 0.9, 1.0)
+            soundmanager.playSound('click1', 0.2, [0.6, 0.8])
           }
         }
       }
@@ -134,6 +141,7 @@ export default class UI extends Thing {
     sendButton.greyedOut = !allowActions
     if (clearButton.clicked && allowActions) {
       this.selectedWords = []
+      soundmanager.playSound('swipe', 0.9, 0.6)
     }
     if (sendButton.clicked && allowActions) {
       const questionText = this.selectedWords.map(x => x.word).join(' ')
@@ -146,6 +154,7 @@ export default class UI extends Thing {
       }
       else {
         this.errorTime = ERROR_DURATION
+        soundmanager.playSound('error', 0.9, 0.8)
       }
     }
   }
