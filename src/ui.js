@@ -8,12 +8,14 @@ import Button from './button.js'
 import Answer from './answer.js'
 
 const BUTTON_MARGIN = 10
+const ERROR_DURATION = 25
 
 export default class UI extends Thing {
   sprite = 'ui_background'
   pan = [0, 0]
   selectedWords = []
   wordBounds = [0, 0, game.getWidth(), game.getHeight() * 0.66]
+  errorTime = 0
 
   constructor() {
     super()
@@ -48,6 +50,8 @@ export default class UI extends Thing {
   }
 
   update() {
+    this.errorTime --
+
     // Figure out which word the user should be acting on
     let activeWord = null
     for (const word of this.getAllWords()) {
@@ -132,11 +136,25 @@ export default class UI extends Thing {
       this.selectedWords = []
     }
     if (sendButton.clicked) {
-      for (const answer of game.getThings().filter(x => x instanceof Answer)) {
-        answer.done = true
+      const questionText = this.selectedWords.map(x => x.word).join(' ')
+      const answerText = game.assets.data.answers[questionText] ?? null
+      if (answerText) {
+        for (const answer of game.getThings().filter(x => x instanceof Answer)) {
+          answer.done = true
+        }
+        game.addThing(new Answer(answerText, [0, game.getHeight() * 0.75]))
       }
-      game.addThing(new Answer("this is test text", [0, game.getHeight() * 0.75]))
+      else {
+        this.errorTime = ERROR_DURATION
+      }
     }
+  }
+
+  getErrorShake() {
+    if (this.errorTime < 0) {
+      return 0;
+    }
+    return (this.errorTime / ERROR_DURATION) * 10 * Math.sin(this.errorTime / 1.4)
   }
 
   preDraw() {

@@ -45,13 +45,6 @@ export default class Answer extends Thing {
     
     ctx.translate(...this.position)
 
-    if (this.isSelected) {
-      ctx.filter = 'brightness(0) invert(1) sepia(1) saturate(50) hue-rotate(0deg)';
-    }
-    else if (this.isHighlighted || this.isBeingDragged) {
-      ctx.filter = 'brightness(0) invert(1) sepia(1) saturate(10) hue-rotate(0deg)';
-    }
-
     for (const word of this.words) {
       for (const char of word) {
         const img = game.assets.images["letter_" + char]

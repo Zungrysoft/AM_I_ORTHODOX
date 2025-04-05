@@ -3,6 +3,7 @@ import * as vec2 from 'vector2'
 import * as u from 'utils'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
+import { YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
 
 export default class Button extends Thing {
   enabled = false
@@ -56,10 +57,10 @@ export default class Button extends Thing {
     ctx.translate(...vec2.scale(this.size, -0.5))
 
     if (this.isClicked) {
-      ctx.filter = 'brightness(0) invert(1) sepia(1) saturate(50) hue-rotate(0deg)';
+      ctx.filter = YELLOW_SELECTED;
     }
     else if (u.pointInsideAabb(...game.mouse.position, this.getAabb())) {
-      ctx.filter = 'brightness(0) invert(1) sepia(1) saturate(10) hue-rotate(0deg)';
+      ctx.filter = YELLOW_HIGHLIGHTED;
     }
 
     const img = game.assets.images[this.icon]

@@ -2,6 +2,7 @@ import * as game from 'game'
 import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
+import { RED_ERROR, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
 
 export const LETTER_SPACING = 26
 export const SPACE_BETWEEN_WORDS = 20
@@ -165,10 +166,17 @@ export default class Word extends Thing {
     ctx.translate(...vec2.scale(this.getSize(), -0.5))
 
     if (this.isSelected) {
-      ctx.filter = 'brightness(0) invert(1) sepia(1) saturate(50) hue-rotate(0deg)';
+      if (game.getThing('ui').errorTime > 0) {
+        ctx.filter = RED_ERROR;
+        const shake = game.getThing('ui').getErrorShake();
+        ctx.translate(shake, 0)
+      }
+      else {
+        ctx.filter = YELLOW_SELECTED;
+      }
     }
     else if (this.isHighlighted || this.isBeingDragged) {
-      ctx.filter = 'brightness(0) invert(1) sepia(1) saturate(10) hue-rotate(0deg)';
+      ctx.filter = YELLOW_HIGHLIGHTED;
     }
 
     for (const char of this.word) {
