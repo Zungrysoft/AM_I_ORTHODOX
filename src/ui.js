@@ -150,7 +150,7 @@ export default class UI extends Thing {
         for (const answer of game.getThings().filter(x => x instanceof Answer)) {
           answer.done = true
         }
-        game.addThing(new Answer(answerText, [0, game.getHeight() * 0.75]))
+        game.addThing(new Answer(answerText, [10, game.getHeight() * 0.75]))
       }
       else {
         this.errorTime = ERROR_DURATION

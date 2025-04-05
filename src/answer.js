@@ -7,7 +7,7 @@ import { BLUE_LOCKED, GREY_OBTAINED } from './colors.js'
 import LockParticle from './lockparticle.js'
 import Word from './word.js'
 
-const LOCK_SPACING = 10
+const LOCK_SPACING = 8
 
 export default class Answer extends Thing {
   words = []
@@ -23,24 +23,72 @@ export default class Answer extends Thing {
   constructor(text, position) {
     super()
 
-    const wordStr = text.split(" ")
+    const wordStrPunc = text.split(" ")
+    let wordStr = []
+    for (const wordPunc of wordStrPunc) {
+      let start = 0
+      let end = -1
+      let hasSpaceAfter = true
+      let endWord = null
+      if (
+        wordPunc.startsWith(',') ||
+        wordPunc.startsWith('.') ||
+        wordPunc.startsWith('?') ||
+        wordPunc.startsWith('!')
+      ) {
+        start = 1
+        wordStr.push({
+          word: wordPunc[0],
+          hasSpaceAfter: false,
+        })
+      }
+
+      if (
+        wordPunc.endsWith(',') ||
+        wordPunc.endsWith('.') ||
+        wordPunc.endsWith('?') ||
+        wordPunc.endsWith('!')
+      ) {
+        end = -2
+        hasSpaceAfter = false
+        endWord = {
+          word: wordPunc[wordPunc.length-1],
+          hasSpaceAfter: true,
+        }
+      }
+      
+      wordStr.push({
+        word: wordPunc.substring(start, wordPunc.length + 1 + end),
+        hasSpaceAfter: hasSpaceAfter,
+      })
+
+      if (endWord) {
+        wordStr.push(endWord)
+      }
+    }
     let pos = 0
     let line = 0
+    let knownWords = {}
     for (let i = 0; i < wordStr.length; i ++) {
-      let width = LETTER_SIZE + ((wordStr[i].length - 1) * LETTER_SPACING)
+      let width = LETTER_SIZE + ((wordStr[i].word.length - 1) * LETTER_SPACING)
       if (pos + width > game.getWidth()) {
         pos = 0
         line ++
       }
-      const locksCount = game.getThing('saveDataManager').wordLocksRemaining(wordStr[i])
+      const locksCount = game.getThing('saveDataManager').wordLocksRemaining(wordStr[i].word)
+
       this.words.push({
-        word: wordStr[i],
+        word: wordStr[i].word,
         locks: locksCount,
-        hasLocks: !!locksCount,
+        hasLocks: knownWords[wordStr[i].word] ? false : !!locksCount,
         position: [pos + width/2, line * LINE_SPACING],
         width: width,
       })
-      pos += width + SPACE_BETWEEN_WORDS
+      knownWords[wordStr[i].word] = true
+      pos += width
+      if (wordStr[i].hasSpaceAfter) {
+        pos += SPACE_BETWEEN_WORDS
+      }
     }
     this.desiredPosition = [...position]
     this.position = [
@@ -55,21 +103,23 @@ export default class Answer extends Thing {
     const { progressed, unlocked, timesSeen } = game.getThing('saveDataManager').receivedAnswer(text)
     let animationTiming = 120
     for (let i = 0; i < this.words.length; i ++) {
-      if (progressed.includes(this.words[i].word)) {
-        this.animationEvents.push({
-          type: "progress",
-          time: animationTiming,
-          index: i
-        })
-        animationTiming += 40
-      }
-      if (unlocked.includes(this.words[i].word)) {
-        this.animationEvents.push({
-          type: "unlock",
-          time: animationTiming + 10,
-          index: i
-        })
-        animationTiming += 60
+      if (this.words[i].hasLocks) {
+        if (progressed.includes(this.words[i].word)) {
+          this.animationEvents.push({
+            type: "progress",
+            time: animationTiming,
+            index: i
+          })
+          animationTiming += 40
+        }
+        if (unlocked.includes(this.words[i].word)) {
+          this.animationEvents.push({
+            type: "unlock",
+            time: animationTiming + 10,
+            index: i
+          })
+          animationTiming += 60
+        }
       }
     }
 
@@ -134,7 +184,7 @@ export default class Answer extends Thing {
     pos[0] -= word.width/2
     pos[0] += (index - 1) * LOCK_SPACING
     pos[0] += -LETTER_SPACING / 2
-    pos[1] += 10
+    pos[1] += 12
     return pos
   }
 
@@ -158,7 +208,7 @@ export default class Answer extends Thing {
 
         ctx.save()
 
-        ctx.translate(-LETTER_SPACING / 2, 10)
+        ctx.translate(-LETTER_SPACING / 2, 12)
         for (let j = 0; j < locksRemaining; j ++) {
           ctx.drawImage(game.assets.images["ui_lock"], 0, 0)
           ctx.translate(LOCK_SPACING, 0)
@@ -168,7 +218,20 @@ export default class Answer extends Thing {
       }
 
       for (const char of word.word) {
-        const img = game.assets.images["letter_" + char]
+        let imgName = 'letter_' + char
+        if (char === ',') {
+          imgName = 'symbol_comma'
+        }
+        else if (char === '.') {
+          imgName = 'symbol_period'
+        }
+        else if (char === '?') {
+          imgName = 'symbol_question_mark'
+        }
+        else if (char === '!') {
+          imgName = 'symbol_exclamation_point'
+        }
+        const img = game.assets.images[imgName]
         ctx.drawImage(img, 0, 0)
         ctx.translate(LETTER_SPACING, 0)
       }

@@ -13,7 +13,7 @@ export default class LockParticle extends Thing {
     this.position = [...position]
     this.velocity = [
       (Math.random() - 0.5) * 10,
-      -7 - (Math.random() * 2),
+      -7 - (Math.random() * 4),
     ]
   }
 
@@ -35,7 +35,7 @@ export default class LockParticle extends Thing {
     ctx.translate(...this.position)
 
     ctx.filter = BLUE_LOCKED;
-    const img = game.assets.images["ui_lock"]
+    const img = game.assets.images["ui_lock_particle"]
     ctx.drawImage(img, 0, 0)
 
     ctx.restore()

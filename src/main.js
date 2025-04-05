@@ -45,12 +45,16 @@ game.assets.images = await game.loadImages({
   letter_x: 'images/letter_x.png',
   letter_y: 'images/letter_y.png',
   letter_z: 'images/letter_z.png',
+  symbol_comma: 'images/symbol_comma.png',
+  symbol_period: 'images/symbol_period.png',
+  symbol_exclamation_point: 'images/symbol_exclamation_point.png',
   symbol_question_mark: 'images/symbol_question_mark.png',
   ui_background: 'images/ui_background.png',
   ui_pan: 'images/ui_pan.png',
   ui_send: 'images/ui_send.png',
   ui_erase: 'images/ui_erase.png',
   ui_lock: 'images/ui_lock.png',
+  ui_lock_particle: 'images/ui_lock_particle.png',
 })
 
 game.assets.data = await game.loadJson({
