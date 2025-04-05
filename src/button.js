@@ -3,7 +3,7 @@ import * as vec2 from 'vector2'
 import * as u from 'utils'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
-import { YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
+import { GREY_OBTAINED, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
 
 export default class Button extends Thing {
   enabled = false
@@ -43,7 +43,7 @@ export default class Button extends Thing {
         this.isClicked = true
       }
     }
-    if (!game.mouse.leftButton) {
+    if (!game.mouse.leftButton && !this.greyedOut) {
       this.isClicked = false
     }
   }
@@ -56,7 +56,10 @@ export default class Button extends Thing {
     ctx.translate(...this.position)
     ctx.translate(...vec2.scale(this.size, -0.5))
 
-    if (this.isClicked) {
+    if (this.greyedOut) {
+      ctx.filter = GREY_OBTAINED;
+    }
+    else if (this.isClicked) {
       ctx.filter = YELLOW_SELECTED;
     }
     else if (u.pointInsideAabb(...game.mouse.position, this.getAabb())) {

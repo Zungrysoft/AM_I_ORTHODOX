@@ -5,6 +5,7 @@ import * as webgl from 'webgl'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
 import UI from './ui.js'
+import SaveDataManager from './savedatamanager.js'
 
 document.title = 'Brain Cave-In'
 game.setWidth(1280)
@@ -54,6 +55,7 @@ game.assets.images = await game.loadImages({
 
 game.assets.data = await game.loadJson({
   answers: 'data/answers.json',
+  words: 'data/words.json',
 })
 
 game.assets.sounds = await game.loadAudio({
@@ -64,5 +66,6 @@ soundmanager.setSoundsTable(game.assets.sounds)
 
 
 game.setScene(() => {
+  game.addThing(new SaveDataManager())
   game.addThing(new UI())
 })

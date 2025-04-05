@@ -14,6 +14,7 @@ export const DRIFT_FORCE = 0.004
 export const DRIFT_CHANGE_RATE = 180
 export const DRIFT_CHANGE_RATE_VARIANCE = 100
 export const BOUND_CORRECTION_FORCE = 0.02
+export const LINE_SPACING = 40
 
 export default class Word extends Thing {
   word = "zyxzyxzyx"

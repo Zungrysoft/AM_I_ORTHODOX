@@ -22,10 +22,6 @@ export default class UI extends Thing {
 
     game.setThingName(this, 'ui')
 
-    game.addThing(new Word('where', [100, 100]))
-    game.addThing(new Word('am', [300, 100]))
-    game.addThing(new Word('i', [100, 200]))
-
     game.addThing(new QuestionMark([game.getWidth() / 2, game.getHeight() + 100]))
     
     const buttonHeightDisabled = game.getHeight() + 100
@@ -51,6 +47,8 @@ export default class UI extends Thing {
 
   update() {
     this.errorTime --
+
+    const allowActions = !game.getThings().some(x => x instanceof Answer && x.animationEvents.length > 0)
 
     // Figure out which word the user should be acting on
     let activeWord = null
@@ -80,7 +78,7 @@ export default class UI extends Thing {
       }
 
       if (game.mouse.leftRelease && activeWord.isBeingDragged) {
-        if (activeWord.dragTime < 15) {
+        if (activeWord.dragTime < 15 && allowActions) {
           if (this.selectedWords.includes(activeWord)) {
             this.selectedWords = this.selectedWords.filter(x => x !== activeWord)
           }
@@ -132,10 +130,12 @@ export default class UI extends Thing {
     const sendButton = game.getThing('sendButton')
     clearButton.enabled = this.selectedWords.length > 0
     sendButton.enabled = this.selectedWords.length > 0
-    if (clearButton.clicked) {
+    clearButton.greyedOut = !allowActions
+    sendButton.greyedOut = !allowActions
+    if (clearButton.clicked && allowActions) {
       this.selectedWords = []
     }
-    if (sendButton.clicked) {
+    if (sendButton.clicked && allowActions) {
       const questionText = this.selectedWords.map(x => x.word).join(' ')
       const answerText = game.assets.data.answers[questionText] ?? null
       if (answerText) {
