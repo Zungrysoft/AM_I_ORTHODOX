@@ -2,12 +2,12 @@ import * as game from 'game'
 import * as u from 'utils'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
-import Word from './word.js'
+import Word, { SPACE_BETWEEN_WORDS } from './word.js'
 import QuestionMark from './questionmark.js'
 import Button from './button.js'
+import Answer from './answer.js'
 
-const SPACE_BETWEEN_WORDS = 20
-const BUTTON_MARGIN = 42
+const BUTTON_MARGIN = 10
 
 export default class UI extends Thing {
   sprite = 'ui_background'
@@ -27,18 +27,19 @@ export default class UI extends Thing {
     game.addThing(new QuestionMark([game.getWidth() / 2, game.getHeight() + 100]))
     
     const buttonHeightDisabled = game.getHeight() + 100
-    const buttonHeightEnabled = game.getHeight() - BUTTON_MARGIN
+    const buttonHeightEnabled = game.getHeight() - 32 - BUTTON_MARGIN
     game.addThing(new Button(
-      [BUTTON_MARGIN, buttonHeightDisabled],
-      [BUTTON_MARGIN, buttonHeightEnabled],
+      [32 + BUTTON_MARGIN, buttonHeightDisabled],
+      [32 + BUTTON_MARGIN, buttonHeightEnabled],
       'ui_erase',
       'clearButton',
     ))
     game.addThing(new Button(
-      [game.getWidth() - BUTTON_MARGIN - 64, buttonHeightDisabled],
-      [game.getWidth() - BUTTON_MARGIN - 64, buttonHeightEnabled],
+      [game.getWidth() - 64 - BUTTON_MARGIN, buttonHeightDisabled],
+      [game.getWidth() - 64 - BUTTON_MARGIN, buttonHeightEnabled],
       'ui_send',
       'sendButton',
+      [128, 64]
     ))
   }
 
@@ -131,7 +132,10 @@ export default class UI extends Thing {
       this.selectedWords = []
     }
     if (sendButton.clicked) {
-      console.log("SEND!")
+      for (const answer of game.getThings().filter(x => x instanceof Answer)) {
+        answer.done = true
+      }
+      game.addThing(new Answer("this is test text", [0, game.getHeight() * 0.75]))
     }
   }
 

@@ -3,15 +3,16 @@ import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
 
-const LETTER_SPACING = 26
-const LETTER_SIZE = 32
-const REPEL_DISTANCE = 120
-const REPEL_FORCE = 0.0002
-const FRICTION = 0.03
-const DRIFT_FORCE = 0.004
-const DRIFT_CHANGE_RATE = 180
-const DRIFT_CHANGE_RATE_VARIANCE = 100
-const BOUND_CORRECTION_FORCE = 0.02
+export const LETTER_SPACING = 26
+export const SPACE_BETWEEN_WORDS = 20
+export const LETTER_SIZE = 32
+export const REPEL_DISTANCE = 120
+export const REPEL_FORCE = 0.0002
+export const FRICTION = 0.03
+export const DRIFT_FORCE = 0.004
+export const DRIFT_CHANGE_RATE = 180
+export const DRIFT_CHANGE_RATE_VARIANCE = 100
+export const BOUND_CORRECTION_FORCE = 0.02
 
 export default class Word extends Thing {
   word = "zyxzyxzyx"

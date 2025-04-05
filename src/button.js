@@ -11,7 +11,7 @@ export default class Button extends Thing {
   positionDisabled = [0, 0]
   size = [64, 64]
 
-  constructor(positionDisabled, positionEnabled, icon, thingName) {
+  constructor(positionDisabled, positionEnabled, icon, thingName, size=[64, 64]) {
     super()
 
     this.position = [...positionDisabled]
@@ -19,6 +19,7 @@ export default class Button extends Thing {
     this.positionEnabled = [...positionEnabled]
     this.enabled = false
     this.icon = icon
+    this.size = size
     game.setThingName(this, thingName)
   }
 
