@@ -1,7 +1,7 @@
 import json
 import math
 
-RESULTS_PER_FILE = 20000
+RESULTS_PER_FILE = 2000
 MAX_SENTENCE_LENGTH = 5
 
 def generate_sentences(results, so_far, depth, rule, parts):

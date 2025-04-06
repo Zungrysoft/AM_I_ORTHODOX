@@ -6,7 +6,6 @@
     "how": { "count": 6, "types": ["interrogative"] },
 
     "the": { "count": 1, "types": ["article"] },
-    "a": { "count": 3, "types": ["article"] },
 
     "am": { "count": 0, "types": ["verb", "aux"] },
     "are": { "count": 3, "types": ["verb", "aux"] },
@@ -16,6 +15,7 @@
     "kill": { "count": 4, "types": ["verb"] },
     "deserve": { "count": 2, "types": ["verb"] },
     "know": { "count": 3, "types": ["verb"] },
+    "get": { "count": 3, "types": ["verb"] },
     "hate": { "count": 2, "types": ["verb", "noun"] },
     "fire": { "count": 2, "types": ["verb", "noun"] },
     "drink": { "count": 2, "types": ["verb", "noun"] },
@@ -24,6 +24,7 @@
     "normal": { "count": 2, "types": ["adjective"] },
 
     "i": { "count": 0, "types": ["noun"] },
+    "me": { "count": 3, "types": ["noun"] },
     "you": { "count": 2, "types": ["noun"] },
     "it": { "count": 2, "types": ["noun"] },
 
