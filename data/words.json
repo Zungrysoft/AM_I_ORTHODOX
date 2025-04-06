@@ -1,14 +1,14 @@
 {
     "where": { "count": 0, "types": ["interrogative"] },
     "who": { "count": 0, "types": ["interrogative"] },
-    "what" : { "count": 3, "types": ["interrogative"] },
+    "what" : { "count": 1, "types": ["interrogative"] },
     "why": { "count": 6, "types": ["interrogative"] },
     "how": { "count": 6, "types": ["interrogative"] },
 
-    "the": { "count": 1, "types": ["article"] },
+    "the": { "count": 3, "types": ["article"] },
 
     "am": { "count": 0, "types": ["verb", "aux"] },
-    "are": { "count": 3, "types": ["verb", "aux"] },
+    "are": { "count": 1, "types": ["verb", "aux"] },
     "is": { "count": 1, "types": ["verb", "aux"] },
     "did": { "count": 3, "types": ["verb", "aux"] },
 
@@ -17,22 +17,24 @@
     "know": { "count": 3, "types": ["verb"] },
     "get": { "count": 3, "types": ["verb"] },
     "hate": { "count": 2, "types": ["verb", "noun"] },
-    "fire": { "count": 2, "types": ["verb", "noun"] },
-    "drink": { "count": 2, "types": ["verb", "noun"] },
+    "thought": { "count": 2, "types": ["verb", "noun"] },
+    "question": { "count": 2, "types": ["verb", "noun"] },
 
+    "my": { "count": 5, "types": ["adjective"] },
     "alive": { "count": 2, "types": ["adjective"] },
-    "normal": { "count": 2, "types": ["adjective"] },
+    "orthodox": { "count": 1, "types": ["adjective"] },
 
     "i": { "count": 0, "types": ["noun"] },
     "me": { "count": 3, "types": ["noun"] },
     "you": { "count": 2, "types": ["noun"] },
     "it": { "count": 2, "types": ["noun"] },
+    "us": { "count": 2, "types": ["noun"] },
+    "we": { "count": 5, "types": ["noun"] },
 
-    "cave": { "count": 2, "types": ["noun"] },
-    "arizona": { "count": 3, "types": ["noun"] },
+    "stock": { "count": 2, "types": ["noun"] },
+    "hedonistic": { "count": 1, "types": ["noun"] },
 
     "here": { "count": 2, "types": ["noun"] },
-
-    "brooke": { "count": 1, "types": ["noun"] },
-    "reginald": { "count": 1, "types": ["noun"] }
+    "riedel": { "count": 4, "types": ["noun"] },
+    "mother": { "count": 1, "types": ["noun"] }
 }

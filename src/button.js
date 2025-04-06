@@ -38,10 +38,17 @@ export default class Button extends Thing {
     this.clicked = false
 
     if (u.pointInsideAabb(...game.mouse.position, this.getAabb())) {
+      if (!this.isHighlighted && !this.greyedOut) {
+        soundmanager.playSound('click1', 0.05, 1.8)
+        this.isHighlighted = true
+      }
       if (game.mouse.leftClick) {
         this.clicked = true
         this.isClicked = true
       }
+    }
+    else {
+      this.isHighlighted = false
     }
     if (!game.mouse.leftButton && !this.greyedOut) {
       this.isClicked = false
@@ -62,7 +69,7 @@ export default class Button extends Thing {
     else if (this.isClicked) {
       ctx.filter = YELLOW_SELECTED;
     }
-    else if (u.pointInsideAabb(...game.mouse.position, this.getAabb())) {
+    else if (this.isHighlighted) {
       ctx.filter = YELLOW_HIGHLIGHTED;
     }
 

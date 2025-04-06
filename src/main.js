@@ -19,6 +19,16 @@ ctx.fillText('Loading...', 64, game.getHeight() - 64)
 ctx.restore()
 
 game.assets.images = await game.loadImages({
+  letter_0: 'images/letter_0.png',
+  letter_1: 'images/letter_1.png',
+  letter_2: 'images/letter_2.png',
+  letter_3: 'images/letter_3.png',
+  letter_4: 'images/letter_4.png',
+  letter_5: 'images/letter_5.png',
+  letter_6: 'images/letter_6.png',
+  letter_7: 'images/letter_7.png',
+  letter_8: 'images/letter_8.png',
+  letter_9: 'images/letter_9.png',
   letter_a: 'images/letter_a.png',
   letter_b: 'images/letter_b.png',
   letter_c: 'images/letter_c.png',
@@ -49,6 +59,7 @@ game.assets.images = await game.loadImages({
   symbol_period: 'images/symbol_period.png',
   symbol_exclamation_point: 'images/symbol_exclamation_point.png',
   symbol_question_mark: 'images/symbol_question_mark.png',
+  symbol_hyphen: 'images/symbol_hyphen.png',
   ui_background: 'images/ui_background.png',
   ui_pan: 'images/ui_pan.png',
   ui_send: 'images/ui_send.png',

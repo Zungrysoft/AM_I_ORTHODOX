@@ -49,8 +49,15 @@ export default class SaveDataManager extends Thing {
 
       this.receivedAnswers[answer] = 1
 
-      const words = answer.replaceAll(',', '').replaceAll('.', '').replaceAll('?', '').replaceAll('!', '').split(' ')
+      let words = answer.replaceAll(',', '').replaceAll('.', '').replaceAll('?', '').replaceAll('!', '').split(' ')
+      let seenWords = {}
       for (const word of words) {
+        // Only do each word once per response
+        if (seenWords[word]) {
+          continue
+        }
+        seenWords[word] = true
+
         if (this.wordProgress[word]) {
           this.wordProgress[word] -= 1
           ret.progressed.push(word)

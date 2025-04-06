@@ -233,6 +233,9 @@ export default class Answer extends Thing {
         else if (char === '!') {
           imgName = 'symbol_exclamation_point'
         }
+        else if (char === '-') {
+          imgName = 'symbol_hyphen'
+        }
         const img = game.assets.images[imgName]
         ctx.drawImage(img, 0, 0)
         ctx.translate(LETTER_SPACING, 0)
