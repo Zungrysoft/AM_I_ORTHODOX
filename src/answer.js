@@ -71,9 +71,11 @@ export default class Answer extends Thing {
     let knownWords = {}
     for (let i = 0; i < wordStr.length; i ++) {
       let width = LETTER_SIZE + ((wordStr[i].word.length - 1) * LETTER_SPACING)
-      if (pos + width > game.getWidth()) {
-        pos = 0
-        line ++
+      if (pos + width > game.getWidth() - 20) {
+        if (!([',', '.', '?', '!', ].includes(wordStr[i].word))) {
+          pos = 0
+          line ++
+        }
       }
       const locksCount = game.getThing('saveDataManager').wordLocksRemaining(wordStr[i].word)
 

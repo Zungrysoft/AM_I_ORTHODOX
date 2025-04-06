@@ -10,13 +10,13 @@ import Answer from './answer.js'
 const BUTTON_MARGIN = 10
 const ERROR_DURATION = 25
 const BLOCK_DURATION = 15
-const MAX_WORDS = 6
+const MAX_WORDS = 5
 
 export default class UI extends Thing {
   sprite = 'ui_background'
   pan = [0, 0]
   selectedWords = []
-  wordBounds = [0, 0, game.getWidth(), game.getHeight() * 0.66]
+  wordBounds = [0, 0, game.getWidth(), game.getHeight() * 0.55]
   errorTime = 0
   blockTime = 0
 
@@ -160,7 +160,7 @@ export default class UI extends Thing {
         for (const answer of game.getThings().filter(x => x instanceof Answer)) {
           answer.done = true
         }
-        game.addThing(new Answer(answerText, [10, game.getHeight() * 0.75]))
+        game.addThing(new Answer(answerText, [10, game.getHeight() * 0.62]))
       }
       else {
         this.errorTime = ERROR_DURATION

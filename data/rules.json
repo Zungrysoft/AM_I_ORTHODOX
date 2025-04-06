@@ -1,0 +1,11 @@
+[
+    ["aux", "noun", ["adjective", "noun", "verb"]],
+    ["aux", "noun", "verb", "adjective"],
+    ["aux", "noun", "verb", "noun"],
+
+    ["interrogative", "verb", "noun"],
+    ["interrogative", "verb", "adjective", "noun"],
+    ["interrogative", "verb", "noun", ["adjective", "noun", "verb"]],
+    ["interrogative", "verb", "noun", "verb", ["adjective", "noun", "verb"]]
+
+]

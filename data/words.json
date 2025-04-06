@@ -1,12 +1,37 @@
 {
-    "where": 0,
-    "who": 0,
-    "am": 0,
-    "i": 0,
-    "cave": 2,
-    "are": 3,
-    "the": 1,
-    "is": 1,
-    "we": 5,
-    "arizona": 3
+    "where": { "count": 0, "types": ["interrogative"] },
+    "who": { "count": 0, "types": ["interrogative"] },
+    "what" : { "count": 3, "types": ["interrogative"] },
+    "why": { "count": 6, "types": ["interrogative"] },
+    "how": { "count": 6, "types": ["interrogative"] },
+
+    "the": { "count": 1, "types": ["article"] },
+    "a": { "count": 3, "types": ["article"] },
+
+    "am": { "count": 0, "types": ["verb", "aux"] },
+    "are": { "count": 3, "types": ["verb", "aux"] },
+    "is": { "count": 1, "types": ["verb", "aux"] },
+    "did": { "count": 3, "types": ["verb", "aux"] },
+
+    "kill": { "count": 4, "types": ["verb"] },
+    "deserve": { "count": 2, "types": ["verb"] },
+    "know": { "count": 3, "types": ["verb"] },
+    "hate": { "count": 2, "types": ["verb", "noun"] },
+    "fire": { "count": 2, "types": ["verb", "noun"] },
+    "drink": { "count": 2, "types": ["verb", "noun"] },
+
+    "alive": { "count": 2, "types": ["adjective"] },
+    "normal": { "count": 2, "types": ["adjective"] },
+
+    "i": { "count": 0, "types": ["noun"] },
+    "you": { "count": 2, "types": ["noun"] },
+    "it": { "count": 2, "types": ["noun"] },
+
+    "cave": { "count": 2, "types": ["noun"] },
+    "arizona": { "count": 3, "types": ["noun"] },
+
+    "here": { "count": 2, "types": ["noun"] },
+
+    "brooke": { "count": 1, "types": ["noun"] },
+    "reginald": { "count": 1, "types": ["noun"] }
 }

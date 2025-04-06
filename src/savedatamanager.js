@@ -86,13 +86,23 @@ export default class SaveDataManager extends Thing {
 
   resetLocalStorage() {
     this.wordProgress = game.assets.data.words
-    this.receivedAnswers = []
+    for (const word in this.wordProgress) {
+      this.wordProgress[word] = this.wordProgress[word].count
+    }
+    this.receivedAnswers = {}
   }
 
   update() {
     if (game.keysDown.ShiftLeft && game.keysPressed.KeyP) {
       localStorage.removeItem('wordProgress');
       localStorage.removeItem('receivedAnswers');
+    }
+    if (game.keysDown.ShiftLeft && game.keysPressed.KeyJ) {
+      this.wordProgress = game.assets.data.words
+      for (const word in this.wordProgress) {
+        this.wordProgress[word] = 0
+      }
+      this.writeToLocalStorage()
     }
   }
 }
