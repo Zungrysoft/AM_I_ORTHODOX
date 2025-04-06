@@ -45,16 +45,23 @@ export default class UI extends Thing {
     ))
 
     for (const answer in game.assets.data.answers) {
-      // Some answers in the config file have | to allow multiple words
+      // Some answers in the config file have / to allow multiple words
       // This splits them into separate answers in the lookup dict
-      if (answer.includes("|")) {
+      if (answer.includes("/")) {
         const splitAnswers = this.splitAnswer(answer)
         for (const splitAnswer of splitAnswers) {
-          this.answers[splitAnswer] = game.assets.data.answers[answer]
+          this.answers[splitAnswer] = game.assets.data.answers[answer].toLowerCase()
         }
       }
       else {
-        this.answers[answer] = game.assets.data.answers[answer]
+        this.answers[answer] = game.assets.data.answers[answer].toLowerCase()
+      }
+    }
+    // Some answers are pointers to other duplicate answers. Handle those.
+    for (const answer in this.answers) {
+      if (this.answers[answer].startsWith("*")) {
+        const newAnswer = this.answers[answer].substring(1)
+        this.answers[answer] = this.answers[newAnswer]
       }
     }
   }
@@ -69,9 +76,9 @@ export default class UI extends Thing {
       return [soFar.substring(0, soFar.length-1)]
     }
 
-    if (answerWords[0].includes("|")) {
+    if (answerWords[0].includes("/")) {
       let ret = []
-      for (const word of answerWords[0].split("|")) {
+      for (const word of answerWords[0].split("/")) {
         ret.push(...this.splitAnswerRecurse(soFar + word + " ", answerWords.slice(1)))
       }
       return ret
@@ -99,7 +106,7 @@ export default class UI extends Thing {
         break
       }
     }
-    if (!activeWord) {
+    if (!activeWord && !(game.getThings().some(x => x instanceof Button && x.isHighlighted))) {
       for (const word of this.getAllWords()) {
         if (u.pointInsideAabb(...game.mouse.position, word.getAabb())) {
           activeWord = word
@@ -135,8 +142,9 @@ export default class UI extends Thing {
             }
             else {
               this.selectedWords.push(activeWord)
-              soundmanager.playSound('swipe', 0.9, 1.0)
-              soundmanager.playSound('click1', 0.2, [0.6, 0.8])
+              soundmanager.playSound('swipe', 0.7, 1.0)
+              soundmanager.playSound('click2', 0.2, [0.6, 0.7])
+              soundmanager.playSound('block', 0.15, 0.7)
             }
           }
         }

@@ -4,7 +4,7 @@
     "what" : { "count": 1, "types": ["interrogative"] },
     "when" : { "count": 3, "types": ["interrogative"] },
     "why": { "count": 6, "types": ["interrogative"] },
-    "how": { "count": 6, "types": ["interrogative"] },
+    "how": { "count": 3, "types": ["interrogative"] },
 
     "the": { "count": 3, "types": ["article"] },
 
@@ -13,19 +13,23 @@
     "is": { "count": 1, "types": ["verb", "aux"] },
     "was": { "count": 4, "types": ["verb", "aux"] },
     "did": { "count": 3, "types": ["verb", "aux"] },
+    "in": { "count": 5, "types": ["verb", "aux"] },
 
-    "kill": { "count": 4, "types": ["verb"] },
     "create": { "count": 2, "types": ["verb"] },
     "deserve": { "count": 2, "types": ["verb"] },
     "know": { "count": 3, "types": ["verb"] },
-    "get": { "count": 3, "types": ["verb"] },
     "hate": { "count": 2, "types": ["verb", "noun"] },
-    "thought": { "count": 2, "types": ["verb", "noun"] },
     "competition": { "count": 2, "types": ["noun"] },
     "war": { "count": 2, "types": ["noun"] },
     "reconstruction": { "count": 2, "types": ["noun"] },
     "stock": { "count": 2, "types": ["noun"] },
-    "trap": { "count": 3, "types": ["noun"] },
+    "trap": { "count": 1, "types": ["noun"] },
+    "fight": { "count": 2, "types": ["verb"] },
+    "inheritance": { "count": 2, "types": ["noun"] },
+    "rich": { "count": 2, "types": ["noun", "adjective"] },
+    "poor": { "count": 2, "types": ["noun", "adjective"] },
+    "everyone": { "count": 3, "types": ["noun", "adjective"] },
+    "thought": { "count": 3, "types": ["noun"] },
 
     "my": { "count": 4, "types": ["adjective"] },
     "dead": { "count": 2, "types": ["adjective"] },
@@ -39,5 +43,7 @@
 
     "here": { "count": 2, "types": ["noun"] },
     "riedel": { "count": 4, "types": ["noun"] },
-    "mother": { "count": 1, "types": ["noun"] }
+    "america": { "count": 7, "types": ["noun"] },
+    "mother": { "count": 1, "types": ["noun"] },
+    "james": { "count": 1, "types": ["noun"] }
 }

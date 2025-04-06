@@ -7,7 +7,7 @@ import Thing from 'thing'
 import UI from './ui.js'
 import SaveDataManager from './savedatamanager.js'
 
-document.title = 'Brain Cave-In'
+document.title = 'AM I ORTHODOX?'
 game.setWidth(1280)
 game.setHeight(720)
 game.createCanvas2D()
@@ -77,6 +77,7 @@ game.assets.data = await game.loadJson({
 
 game.assets.sounds = await game.loadAudio({
   click1: 'sounds/click1.wav',
+  click2: 'sounds/click2.wav',
   swipe: 'sounds/swipe.wav',
   swoosh1: 'sounds/swoosh1.wav',
   unlock: 'sounds/unlock.wav',

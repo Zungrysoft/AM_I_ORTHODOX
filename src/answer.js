@@ -134,8 +134,9 @@ export default class Answer extends Thing {
 
   update() {
     if (this.done) {
+      this.animationTime = 9999999999
       this.position = vec2.lerp(this.position, this.donePosition, 0.1)
-      if (vec2.distance(this.position, this.donePosition) < 1) {
+      if (this.animationEvents.length === 0 && vec2.distance(this.position, this.donePosition) < 1) {
         this.isDead = true
       }
     }
@@ -147,40 +148,40 @@ export default class Answer extends Thing {
       if (game.keysPressed.KeyS) {
         this.animationTime = 9999999999
       }
+    }
 
-      if (this.animationEvents[0] && this.animationTime >= this.animationEvents[0].time) {
-        const animEvent = this.animationEvents.shift()
-        let word = this.words[animEvent.index]
+    if (this.animationEvents[0] && this.animationTime >= this.animationEvents[0].time) {
+      const animEvent = this.animationEvents.shift()
+      let word = this.words[animEvent.index]
 
-        if (animEvent.type === "progress") {
-          const pos = vec2.add(vec2.add(this.position, word.position), this.getLockPosition(word, word.locks))
-          game.addThing(new LockParticle(pos))
-          game.addThing(new LockParticle(pos))
-          game.addThing(new LockParticle(pos))
-          game.addThing(new LockParticle(pos))
-          game.addThing(new LockParticle(pos))
-          game.addThing(new LockParticle(pos))
-          soundmanager.playSound('break2', 0.4, [1.4, 1.8])
-          soundmanager.playSound('impact1', 0.4, 1.7)
-          word.locks --
+      if (animEvent.type === "progress") {
+        const pos = vec2.add(vec2.add(this.position, word.position), this.getLockPosition(word, word.locks))
+        game.addThing(new LockParticle(pos))
+        game.addThing(new LockParticle(pos))
+        game.addThing(new LockParticle(pos))
+        game.addThing(new LockParticle(pos))
+        game.addThing(new LockParticle(pos))
+        game.addThing(new LockParticle(pos))
+        soundmanager.playSound('break2', 0.4, [1.4, 1.8])
+        soundmanager.playSound('impact1', 0.4, 1.7)
+        word.locks --
+      }
+
+      if (animEvent.type === "unlock") {
+        const pos = vec2.add(this.position, word.position)
+        game.addThing(new Word(word.word, pos, [
+          Math.random() * game.getWidth() * 0.5 + game.getWidth() * 0.25,
+          Math.random() * game.getHeight() * 0.25 + game.getWidth() * 0.125,
+        ]))
+        soundmanager.playSound('swipe', 0.9, 1.0)
+        if (game.assets.data.specialWords[word.word]) {
+          soundmanager.playSound('newword2', 0.4, 0.7)
         }
-
-        if (animEvent.type === "unlock") {
-          const pos = vec2.add(this.position, word.position)
-          game.addThing(new Word(word.word, pos, [
-            Math.random() * game.getWidth() * 0.5 + game.getWidth() * 0.25,
-            Math.random() * game.getHeight() * 0.25 + game.getWidth() * 0.125,
-          ]))
-          soundmanager.playSound('swipe', 0.9, 1.0)
-          if (game.assets.data.specialWords[word.word]) {
-            soundmanager.playSound('newword2', 0.4, 0.7)
-          }
-          else {
-            soundmanager.playSound('newword1', 0.4, 0.9)
-          }
-          
-          word.hasLocks = false
+        else {
+          soundmanager.playSound('newword1', 0.4, 0.9)
         }
+        
+        word.hasLocks = false
       }
     }
   }
