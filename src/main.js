@@ -60,6 +60,7 @@ game.assets.images = await game.loadImages({
   symbol_exclamation_point: 'images/symbol_exclamation_point.png',
   symbol_question_mark: 'images/symbol_question_mark.png',
   symbol_hyphen: 'images/symbol_hyphen.png',
+  symbol_apostraphe: 'images/symbol_apostraphe.png',
   ui_background: 'images/ui_background.png',
   ui_pan: 'images/ui_pan.png',
   ui_send: 'images/ui_send.png',

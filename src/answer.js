@@ -2,7 +2,7 @@ import * as game from 'game'
 import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
-import { LETTER_SIZE, LETTER_SPACING, LINE_SPACING, SPACE_BETWEEN_WORDS } from './word.js'
+import { APOSTRAPHE_SPACING, LETTER_SIZE, LETTER_SPACING, LINE_SPACING, WORD_SPACING } from './word.js'
 import { BLUE_LOCKED, GREY_OBTAINED } from './colors.js'
 import LockParticle from './lockparticle.js'
 import Word from './word.js'
@@ -89,7 +89,7 @@ export default class Answer extends Thing {
       knownWords[wordStr[i].word] = true
       pos += width
       if (wordStr[i].hasSpaceAfter) {
-        pos += SPACE_BETWEEN_WORDS
+        pos += WORD_SPACING
       }
     }
     this.desiredPosition = [...position]
@@ -143,6 +143,10 @@ export default class Answer extends Thing {
       this.position = vec2.lerp(this.position, this.desiredPosition, 0.1)
 
       this.animationTime ++
+
+      if (game.keysPressed.KeyS) {
+        this.animationTime = 9999999999
+      }
 
       if (this.animationEvents[0] && this.animationTime >= this.animationEvents[0].time) {
         const animEvent = this.animationEvents.shift()
@@ -220,6 +224,10 @@ export default class Answer extends Thing {
       }
 
       for (const char of word.word) {
+        if (char === '_') {
+          continue
+        }
+
         let imgName = 'letter_' + char
         if (char === ',') {
           imgName = 'symbol_comma'
@@ -236,9 +244,18 @@ export default class Answer extends Thing {
         else if (char === '-') {
           imgName = 'symbol_hyphen'
         }
+        else if (char === '\'') {
+          imgName = 'symbol_apostraphe'
+        }
         const img = game.assets.images[imgName]
         ctx.drawImage(img, 0, 0)
-        ctx.translate(LETTER_SPACING, 0)
+
+        if (char === '\'') {
+          ctx.translate(APOSTRAPHE_SPACING, 0)
+        }
+        else {
+          ctx.translate(LETTER_SPACING, 0)
+        }
       }
 
       ctx.restore()

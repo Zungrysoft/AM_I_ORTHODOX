@@ -2,7 +2,7 @@ import * as game from 'game'
 import * as u from 'utils'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
-import Word, { SPACE_BETWEEN_WORDS } from './word.js'
+import Word, { WORD_SPACING } from './word.js'
 import QuestionMark from './questionmark.js'
 import Button from './button.js'
 import Answer from './answer.js'
@@ -19,6 +19,7 @@ export default class UI extends Thing {
   wordBounds = [0, 0, game.getWidth(), game.getHeight() * 0.55]
   errorTime = 0
   blockTime = 0
+  answers = {}
 
   constructor() {
     super()
@@ -42,6 +43,42 @@ export default class UI extends Thing {
       'sendButton',
       [128, 64]
     ))
+
+    for (const answer in game.assets.data.answers) {
+      // Some answers in the config file have | to allow multiple words
+      // This splits them into separate answers in the lookup dict
+      if (answer.includes("|")) {
+        const splitAnswers = this.splitAnswer(answer)
+        for (const splitAnswer of splitAnswers) {
+          this.answers[splitAnswer] = game.assets.data.answers[answer]
+        }
+      }
+      else {
+        this.answers[answer] = game.assets.data.answers[answer]
+      }
+    }
+  }
+
+  splitAnswer(answer) {
+    const answerWords = answer.split(" ")
+    return this.splitAnswerRecurse("", answerWords)
+  }
+
+  splitAnswerRecurse(soFar, answerWords) {
+    if (answerWords.length === 0) {
+      return [soFar.substring(0, soFar.length-1)]
+    }
+
+    if (answerWords[0].includes("|")) {
+      let ret = []
+      for (const word of answerWords[0].split("|")) {
+        ret.push(...this.splitAnswerRecurse(soFar + word + " ", answerWords.slice(1)))
+      }
+      return ret
+    }
+    else {
+      return this.splitAnswerRecurse(soFar + answerWords[0] + " ", answerWords.slice(1))
+    }
   }
 
   getAllWords() {
@@ -126,7 +163,7 @@ export default class UI extends Thing {
 
       let selectedWordsExtended = [...this.selectedWords, questionMark]
 
-      let totalWidth = (selectedWordsExtended.length - 1) * SPACE_BETWEEN_WORDS
+      let totalWidth = (selectedWordsExtended.length - 1) * WORD_SPACING
       for (const word of selectedWordsExtended) {
         totalWidth += word.getSize()[0]
       }
@@ -135,7 +172,7 @@ export default class UI extends Thing {
         word.selectedPosition[1] = game.getHeight() - 40
         word.selectedPosition[0] = game.getWidth() / 2
         word.selectedPosition[0] += (-totalWidth / 2) + (word.getSize()[0] / 2) + curPosition
-        curPosition += word.getSize()[0] + SPACE_BETWEEN_WORDS
+        curPosition += word.getSize()[0] + WORD_SPACING
       }
     }
     else {
@@ -155,7 +192,7 @@ export default class UI extends Thing {
     }
     if (sendButton.clicked && allowActions) {
       const questionText = this.selectedWords.map(x => x.word).join(' ')
-      const answerText = game.assets.data.answers[questionText] ?? null
+      const answerText = this.answers[questionText] ?? null
       if (answerText) {
         for (const answer of game.getThings().filter(x => x instanceof Answer)) {
           answer.done = true

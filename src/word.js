@@ -5,7 +5,8 @@ import Thing from 'thing'
 import { RED_ERROR, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
 
 export const LETTER_SPACING = 26
-export const SPACE_BETWEEN_WORDS = 20
+export const APOSTRAPHE_SPACING = 10
+export const WORD_SPACING = 20
 export const LETTER_SIZE = 32
 export const REPEL_DISTANCE = 50
 export const REPEL_FORCE = 0.0002
@@ -188,6 +189,9 @@ export default class Word extends Thing {
     }
 
     for (const char of this.word) {
+      if (char === '_') {
+        continue
+      }
       const img = game.assets.images["letter_" + char]
       ctx.drawImage(img, 0, 0)
       ctx.translate(LETTER_SPACING, 0)

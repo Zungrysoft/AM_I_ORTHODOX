@@ -1,6 +1,6 @@
 import * as game from 'game'
 import Thing from 'thing'
-import Word, { SPACE_BETWEEN_WORDS } from './word.js'
+import Word, { WORD_SPACING } from './word.js'
 
 export default class SaveDataManager extends Thing {
   wordProgress = {}
