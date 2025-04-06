@@ -16,7 +16,7 @@ export default class UI extends Thing {
   sprite = 'ui_background'
   pan = [0, 0]
   selectedWords = []
-  wordBounds = [0, 0, game.getWidth(), game.getHeight() * 0.55]
+  wordBounds = [0, 0, game.getWidth(), game.getHeight() * 0.54]
   errorTime = 0
   blockTime = 0
   answers = {}
@@ -44,24 +44,24 @@ export default class UI extends Thing {
       [128, 64]
     ))
 
-    for (const answer in game.assets.data.answers) {
-      // Some answers in the config file have / to allow multiple words
-      // This splits them into separate answers in the lookup dict
-      if (answer.includes("/")) {
-        const splitAnswers = this.splitAnswer(answer)
-        for (const splitAnswer of splitAnswers) {
-          this.answers[splitAnswer] = game.assets.data.answers[answer].toLowerCase()
+    for (const questionStart in game.assets.data.answers) {
+      // Some questions have | to allow multiple possible matches for the entire question
+      let questions = [questionStart]
+      if (questionStart.includes("|")) {
+        questions = questionStart.split("|")
+      }
+      for (const question of questions) {
+        // Some questions in the config file have / to allow multiple words
+        // This splits them into questions answers in the lookup dict
+        if (question.includes("/")) {
+          const splitAnswers = this.splitAnswer(question)
+          for (const splitAnswer of splitAnswers) {
+            this.answers[splitAnswer] = game.assets.data.answers[questionStart].toLowerCase()
+          }
         }
-      }
-      else {
-        this.answers[answer] = game.assets.data.answers[answer].toLowerCase()
-      }
-    }
-    // Some answers are pointers to other duplicate answers. Handle those.
-    for (const answer in this.answers) {
-      if (this.answers[answer].startsWith("*")) {
-        const newAnswer = this.answers[answer].substring(1)
-        this.answers[answer] = this.answers[newAnswer]
+        else {
+          this.answers[question] = game.assets.data.answers[questionStart].toLowerCase()
+        }
       }
     }
   }

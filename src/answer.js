@@ -248,6 +248,15 @@ export default class Answer extends Thing {
         else if (char === '\'') {
           imgName = 'symbol_apostraphe'
         }
+        else if (char === '$') {
+          imgName = 'symbol_dollar_sign'
+        }
+        else if (char === ';') {
+          imgName = 'symbol_semicolon'
+        }
+        else if (char === ':') {
+          imgName = 'symbol_colon'
+        }
         const img = game.assets.images[imgName]
         ctx.drawImage(img, 0, 0)
 

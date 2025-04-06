@@ -17,8 +17,8 @@ export default class SaveDataManager extends Thing {
     for (const word in this.wordProgress) {
       if (this.wordProgress[word] === 0) {
         game.addThing(new Word(word, [
-          Math.random() * game.getWidth() * 0.5 + game.getWidth() * 0.25,
-          Math.random() * game.getHeight() * 0.25 + game.getWidth() * 0.125,
+          Math.random() * game.getWidth() * 0.8 + game.getWidth() * 0.1,
+          Math.random() * game.getHeight() * 0.35 + game.getHeight() * 0.1,
         ]))
       }
     }
