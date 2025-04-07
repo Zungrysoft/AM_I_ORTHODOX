@@ -1,11 +1,13 @@
 import * as game from 'game'
 import * as u from 'utils'
 import Thing from 'thing'
-import Word, { WORD_SPACING } from './word.js'
+import Word from './word.js'
 
 export default class SaveDataManager extends Thing {
   wordProgress = {}
   receivedAnswers = {}
+  gamePhase = 1
+  isMusicEnabled = false
 
   constructor() {
     super()
@@ -78,18 +80,36 @@ export default class SaveDataManager extends Thing {
     }
   }
 
+  advanceGamePhase(phase) {
+    if (phase > this.gamePhase) {
+      this.gamePhase = phase
+      this.writeToLocalStorage()
+    }
+  }
+
+  getGamePhase() {
+    return this.isMusicEnabled ? this.gamePhase : 0
+  }
+
+  enableMusic() {
+    this.isMusicEnabled = true
+  }
+
   writeToLocalStorage() {
     localStorage.setItem('wordProgress', JSON.stringify(this.wordProgress));
     localStorage.setItem('receivedAnswers', JSON.stringify(this.receivedAnswers));
+    localStorage.setItem('gamePhase', this.gamePhase);
   }
 
   readFromLocalStorage() {
     const readWordProgress = JSON.parse(localStorage.getItem('wordProgress'));
     const readReceivedAnswers = JSON.parse(localStorage.getItem('receivedAnswers'));
+    const readGamePhase = Number(localStorage.getItem('gamePhase')) || 1;
 
     if (readWordProgress != null && readReceivedAnswers != null) {
       this.wordProgress = readWordProgress;
       this.receivedAnswers = readReceivedAnswers;
+      this.gamePhase = readGamePhase;
     }
     else {
       this.resetLocalStorage()
@@ -102,14 +122,20 @@ export default class SaveDataManager extends Thing {
       this.wordProgress[word] = this.wordProgress[word].count
     }
     this.receivedAnswers = {}
+    this.gamePhase = 1
   }
 
   update() {
+    // Cheat/debug commands
     if (game.keysDown.ShiftLeft) {
+
+      // Reset progress
       if (game.keysPressed.KeyP) {
         localStorage.removeItem('wordProgress');
         localStorage.removeItem('receivedAnswers');
       }
+
+      // Cheat all words
       if (game.keysPressed.KeyJ) {
         this.wordProgress = game.assets.data.words
         for (const word in this.wordProgress) {
@@ -117,6 +143,8 @@ export default class SaveDataManager extends Thing {
         }
         this.writeToLocalStorage()
       }
+
+      // List all possible words
       if (game.keysPressed.KeyL) {
         let wordList = []
         for (const word in this.wordProgress) {
@@ -127,6 +155,8 @@ export default class SaveDataManager extends Thing {
         const shuffledList = u.shuffle(wordList, Math.random)
         console.log(shuffledList.join("\n"))
       }
+
+      // Run simulator
       if (game.keysPressed.KeyM) {
         const answers = game.getThing('ui').answers
         let wordCounts = {}

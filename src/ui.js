@@ -222,6 +222,8 @@ export default class UI extends Thing {
               }
               game.addThing(new Answer(answerText, [10, game.getHeight() * 0.62]))
               this.haveWordsChanged = false
+
+              game.getThing('saveDataManager').enableMusic()
             }
           }
           else {

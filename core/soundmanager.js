@@ -64,7 +64,13 @@ export function playMusic (musicName, volume = 1) {
   music.currentTime = 0
   music.loop = true
   currentMusic.push(music)
-  music.play()
+  try {
+    music.play()
+  }
+  catch (e) {
+    return null
+  }
+  
   return music
 }
 

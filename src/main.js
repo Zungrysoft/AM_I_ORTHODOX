@@ -6,6 +6,7 @@ import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
 import UI from './ui.js'
 import SaveDataManager from './savedatamanager.js'
+import MusicManager from './musicmanager.js'
 
 document.title = 'AM I ORTHODOX?'
 game.setWidth(1280)
@@ -91,6 +92,9 @@ game.assets.sounds = await game.loadAudio({
   error: 'sounds/error.wav',
   block: 'sounds/block.wav',
   talk: 'sounds/talk.wav',
+
+  music1: 'sounds/track1.flac',
+  music2: 'sounds/track2.flac',
 })
 soundmanager.setSoundsTable(game.assets.sounds)
 
@@ -99,4 +103,5 @@ soundmanager.setSoundsTable(game.assets.sounds)
 game.setScene(() => {
   game.addThing(new SaveDataManager())
   game.addThing(new UI())
+  game.addThing(new MusicManager())
 })
