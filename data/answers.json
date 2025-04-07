@@ -105,6 +105,9 @@
     "why did i fight you|why did you fight me|did mother create competition": "our mother applied the principles of market competition to us as children. she kept us at each others' throats because iron sharpens iron. when you decided to leave, i won by forfeit.",
     "did i fight james|did james fight me": "no. you were the only two out of just about everyone who did not fight each other. it is a shame, you could have learned a lot from each other. maybe it would have saved his life.",
     "who did i fight": "when you were in your prime, you fought everyone, me especially. james was the only exception.",
+    "do the rich fight|why do the rich fight": "they must. it is the only way to stay rich.",
+    "do the poor fight": "the orthodox among them do. but only the chosen few will dominate the rest and rise to the top.",
+    "why do you fight": "because am orthodox.",
     
     "what is competition": "to put it simply, competition is where different businesses war on each other. it is how the strongest and most productive businesses survive while inefficient ones we leave for dead.",
     "is competition orthodox": "is its the definition of orthodox. the ideal state of the market is a leopard devouring another leopard, with a third leopard sneaking up to devour it.",
@@ -130,8 +133,8 @@
     "how/why is stock orthodox": "the stock market is one of the ways this world fosters competition. one can become rich by putting their faith in the right company.",
 
     "are the rich/poor orthodox/hedonistic": "rich or poor does not matter. orthodoxy is a desire to fight with others for our limited resources. it does not mean you must win, just that you do not accept your current status.",
-    "who is rich": "those who understand why we were put on this earth: to war on each other. life must war on itself. if it did not, we would still be single-celled organisms in the ocean.",
-    "who is poor": "those who are unfit for survival.",
+    "who is rich|who are the rich": "those who understand why we were put on this earth: to war on each other. life must war on itself. if it did not, we would still be single-celled organisms in the ocean.",
+    "who is poor|who are the poor": "those who are unfit for survival.",
     "am i rich/poor": "you got a lot of money from our mother's inheritance. i will teach you to use this money in accordance with orthodoxy.",
     "are you rich": "i negotiated a very high salary when i was chosen at riedel.",
     "are you poor": "if i was poor, i would have no right to speak to you this way.",
@@ -147,6 +150,7 @@
     "is riedel stock rich/poor": "riedel stock is a very safe investment overall. it did dip a little bit this week, but i am sure that is nothing more than a minor correction.",
     "when do i deserve riedel|do i deserve riedel": "you will deserve riedel when you prove yourself an industrious and competitive worker. i will help you get there.",
     "why do/did you deserve riedel|do/did you deserve riedel": "because riedel needs me. i am the only one who can bring victory to riedel and dominate the competition.",
+    "why am i in riedel": "because i brought you here. do not worry, this place is safe.",
 
     "did/do you know james": "i knew him, though we were not friends. i found his lack of orthodoxy offputting.",
     "did/do you hate james": "i did not hate him, but i did not respect him either. even if he had survived the war, it was a safe bet that he would not have accomplished much in his career.",
@@ -159,6 +163,7 @@
     "what did james hate": "you two would play chess every so often. he hated when you beat him and it got to the point that he refused to play you anymore. a sore loser for sure.",
     "did james know mother|did mother know james": "every ten thousand rifles mother shipped, she would celebrate by baking a batch of her brownies for the family. james loved them. he ate a lot of them during the war.",
     "did james hate me|did i hate james": "no, you two definitely did not hate each other.",
+    "are you james": "no. james died in the war.",
     
     "did i leave|did i leave you/mother": "yeah. you left us. and now i have brought you back.",
     "when did i leave": "the day you turned 17 and became a legal adult. in doing so you abandoned the reconstruction of the east coast of america.",
@@ -201,11 +206,15 @@
     "did you dominate in/the competition": "yes. because i learned from the best.",
     "do/did i dominate in competition": "you could, if you had the desire to.",
     "how do i/you dominate hate": "you don't. you let it make you stronger.",
+    "do the rich dominate": "by definition, they already have.",
+    "do the poor dominate": "the fact that they are not rich proves that they do not. they lack either the will or the ability. either way, they are where they deserve to be.",
+    "why dominate the poor": "that is one's reward for being at the top. it is retribution for the formerly submissive.",
 
     "how are you": "riedel stock did poorly this week, which is worrying. in times like this, i must watch my back.",
     "why are you here": "i am the chairman of riedel industries. i rarely ever leave here.",
     "how am i": "better now, i am sure.",
     "how am i here": "i lured you into quite the trap.",
+    "how am in riedel": "brought you here after i sprung my trap on you.",
     "why am i here": "i have brought you here to complete the reconstruction of your thought processes. this is for your own good.",
     "am i safe": "i promise no harm will come to you here.",
     "was i safe": "you probably believed that you were.",
@@ -215,6 +224,7 @@
     "how did you trap me": "i told you our mother's estate had been paid out from a recent settlement which meant you got another $5000. when you arrived to pick it up, i wrestled you to the ground to sedate you.",
     "when did you trap me": "after i had perfected the thought reconstruction operation. i wanted you to be my first test subject.",
     "did the inheritance trap me": "it was the perfect bait. another payout of money you did not deserve.",
+    "who did you trap": "i trapped you. outsmarted you. this time you were not one step ahead.",
 
     "why did you sedate me|did you sedate me": "you had to be sedated for me to perform the thought reconstruction.",
     "how did you sedate me": "i pinned you down and injected you with an anesthetic. you fought valiantly, which reassured me that this would work.",
@@ -225,13 +235,14 @@
     "did you create thought reconstruction": "yes. it is my own invention. and you are my first test subject.",
     "am i in thought reconstruction": "yes. we are performing it as we speak.",
     "is thought reconstruction orthodox": "the operation is designed to create orthodoxy out of a hedonist.",
-    "do/did i deserve thought reconstruction": "you were the perfect candidate for it.",
+    "do/did i deserve thought reconstruction": "you were the perfect candidate for it. let this happen.",
     "is thought reconstruction safe": "i believe so. but even if this operation does go wrong, you would deserve that.",
 
     "are you dead": "i am right here at my desk, perfectly alive.",
     "are you here": "no. i am nine floors below you in my office.",
     "what did you do": "what i had to do.",
     "what did i do": "nothing, which is the worst sin of all.",
+    "did you do this": "i did.",
     "am i dead": "the old you is.",
     "am i you": "we most certainly are not the same person. that is the truth.",
     "are you me": "am not your inner monologue, if that is what you are asking",
@@ -244,5 +255,6 @@
     "did/do i deserve america": "only the orthodox deserve this country. i will help you to deserve it.",
 
     "why did/do i deserve this": "because you were a rotten stain on our society. a contemptible roach who sat around believing he did not need to watch for the wolves at his door. well the wolves came. and the wolves are me.",
-    "did/do i deserve this": "can think of nobody more deserving than you, you leech."
+    "did/do i deserve this": "can think of nobody more deserving than you. let this happen.",
+    "did i deserve this trap": "you needed it to be done. let this happen."
 }
