@@ -209,7 +209,13 @@ export default class Answer extends Thing {
           game.addThing(new LockParticle(pos, isSpecial))
           game.addThing(new LockParticle(pos, isSpecial))
           game.addThing(new LockParticle(pos, isSpecial))
-          soundmanager.playSound('break2', 0.4, [1.4, 1.8])
+          if (isSpecial) {
+            soundmanager.playSound('break2', 0.4, [1.3, 1.7])
+            soundmanager.playSound('break5', 0.3, [1.2, 1.4])
+          }
+          else {
+            soundmanager.playSound('break2', 0.4, [1.4, 1.8])
+          }
           soundmanager.playSound('impact1', 0.4, 1.7)
           word.locks --
         }

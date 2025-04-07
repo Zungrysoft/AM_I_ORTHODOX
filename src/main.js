@@ -98,6 +98,7 @@ game.assets.sounds = await game.loadAudio({
   swoosh1: 'sounds/swoosh1.wav',
   discover: 'sounds/discover.wav',
   break2: 'sounds/break2.wav',
+  break5: 'sounds/break5.wav',
   impact1: 'sounds/impact1.wav',
   newword1: 'sounds/newword1.wav',
   newword2: 'sounds/newword2.wav',
