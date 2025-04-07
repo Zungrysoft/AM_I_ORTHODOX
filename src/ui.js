@@ -21,6 +21,7 @@ export default class UI extends Thing {
   blockTime = 0
   answers = {}
   haveWordsChanged = true
+  counterPos = [game.getWidth() - 116, -48]
 
   constructor() {
     super()
@@ -249,13 +250,47 @@ export default class UI extends Thing {
   preDraw() {
     const { ctx } = game
 
+    // background
     ctx.save()
     ctx.fillStyle = 'rgba(0, 0, 0, 1)'
     ctx.fillRect(0, 0, game.getWidth(), game.getHeight())
+    ctx.restore()
 
+    // divider
+    ctx.save()
     const img = game.assets.images.ui_background
     ctx.drawImage(img, 0, 0)
+    ctx.restore()
+
+    // progress counter
+    ctx.save()
+    const unlockedWords = u.clamp(game.getThings().filter(x => x instanceof Word).length, 0, 99)
+    const totalWords = u.clamp(game.getThing('saveDataManager').totalWords, 0, 99)
+
+    if (unlockedWords > 4) {
+      this.counterPos[1] = u.lerp(this.counterPos[1], 8, 0.1)
+    }
+
+    let digits = [
+      Math.floor(unlockedWords / 10) || 'clear',
+      unlockedWords % 10,
+      'slash',
+      Math.floor(totalWords / 10),
+      totalWords % 10,
+    ]
+
+    ctx.translate(...this.counterPos)
+
+    for (const digit of digits) {
+      if (digit !== 'clear') {
+        const img = game.assets.images['number_' + digit]
+        ctx.drawImage(img, 0, 0)
+      }
+      
+      ctx.translate(20, 0)
+    }
 
     ctx.restore()
+    
   }
 }

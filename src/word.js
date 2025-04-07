@@ -131,17 +131,34 @@ export default class Word extends Thing {
         // Constrain to boundary area
         const bounds = game.getThing('ui').wordBounds
         const aabb = this.getAabb()
+        
+        // Left bound
         if (aabb[0] < bounds[0]) {
           this.velocity[0] += (bounds[0] - aabb[0]) * BOUND_CORRECTION_FORCE
         }
+        // Right bound
         if (aabb[2] > bounds[2]) {
           this.velocity[0] -= (aabb[2] - bounds[2]) * BOUND_CORRECTION_FORCE
         }
+        // Top bound
         if (aabb[1] < bounds[1]) {
           this.velocity[1] += (bounds[1] - aabb[1]) * BOUND_CORRECTION_FORCE
         }
+        // Bottom bound
         if (aabb[3] > bounds[3]) {
           this.velocity[1] -= (aabb[3] - bounds[3]) * BOUND_CORRECTION_FORCE
+        }
+        // Progress counter
+        if (aabb[2] > bounds[2] - 116 && aabb[1] < bounds[1] + 40) {
+          const xDelta = aabb[2] - (bounds[2] - 116)
+          const yDelta = (bounds[1] + 40) - aabb[1]
+          if (xDelta < yDelta) {
+            this.velocity[0] -= xDelta * BOUND_CORRECTION_FORCE
+          }
+          else {
+            this.velocity[1] += yDelta * BOUND_CORRECTION_FORCE
+          }
+          
         }
 
         this.driftChangeTime --

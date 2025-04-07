@@ -8,6 +8,7 @@ export default class SaveDataManager extends Thing {
   receivedAnswers = {}
   gamePhase = 1
   isMusicEnabled = false
+  totalWords = 0
 
   constructor() {
     super()
@@ -17,6 +18,7 @@ export default class SaveDataManager extends Thing {
     this.readFromLocalStorage()
 
     for (const word in this.wordProgress) {
+      this.totalWords ++
       if (this.wordProgress[word] === 0) {
         game.addThing(new Word(word, [
           Math.random() * game.getWidth() * 0.8 + game.getWidth() * 0.1,
