@@ -3,7 +3,7 @@ import * as u from 'utils'
 import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
-import { PINK_LOCKED, RED_ERROR, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
+import { GREEN_HINT, PINK_LOCKED, RED_ERROR, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
 import SuccessParticle from './successparticle.js'
 import SmokeParticle from './smokeparticle.js'
 
@@ -34,6 +34,7 @@ export default class Word extends Thing {
   mustReturnToOriginalPosition = false
   dragTime = 0
   flashTime = 0
+  isHint = false
 
   constructor(word, position, originalPosition) {
     super()
@@ -205,7 +206,6 @@ export default class Word extends Thing {
       ctx.translate(0, Math.sin(Math.PI * (flashPoint / FLASH_DURATION)) * -28)
     }
     
-
     if (this.isSelected) {
       if (game.getThing('ui').errorTime > 0) {
         ctx.filter = RED_ERROR;
@@ -221,6 +221,11 @@ export default class Word extends Thing {
     }
     else if (this.isHighlighted || this.isBeingDragged) {
       ctx.filter = YELLOW_HIGHLIGHTED;
+    }
+
+    // Hint color overrides all
+    if (this.isHint) {
+      ctx.filter = GREEN_HINT;
     }
 
     for (const char of this.word) {

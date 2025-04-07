@@ -12,6 +12,7 @@ const BUTTON_MARGIN = 10
 const ERROR_DURATION = 25
 const BLOCK_DURATION = 15
 const MAX_WORDS = 5
+const HINT_TIME = 60 * 60 * 3
 
 export default class UI extends Thing {
   sprite = 'ui_background'
@@ -24,6 +25,8 @@ export default class UI extends Thing {
   haveWordsChanged = true
   counterPos = [game.getWidth() - 116, -48]
   counterTime = 60
+  lastUnlockedWord = 0
+  time = 0
 
   constructor() {
     super()
@@ -39,6 +42,12 @@ export default class UI extends Thing {
       [32 + BUTTON_MARGIN, buttonHeightEnabled],
       'ui_erase',
       'clearButton',
+    ))
+    game.addThing(new Button(
+      [32 + 64 + BUTTON_MARGIN*3, buttonHeightDisabled],
+      [32 + 64 + BUTTON_MARGIN*3, buttonHeightEnabled],
+      'ui_hint',
+      'hintButton',
     ))
     game.addThing(new Button(
       [game.getWidth() - 64 - BUTTON_MARGIN, buttonHeightDisabled],
@@ -106,9 +115,11 @@ export default class UI extends Thing {
   update() {
     this.errorTime --
     this.blockTime --
+    this.time ++
 
     const currentlyAnimating = game.getThings().some(x => x instanceof Answer && x.animationPhase < 2)
     const allowActions = !game.getThings().some(x => x instanceof Answer && x.animationEvents.length > 0)
+    const showHint = this.time - this.lastUnlockedWord > HINT_TIME
 
     // Figure out which word the user should be acting on
     let activeWord = null
@@ -204,10 +215,13 @@ export default class UI extends Thing {
     // Handle buttons
     const clearButton = game.getThing('clearButton')
     const sendButton = game.getThing('sendButton')
+    const hintButton = game.getThing('hintButton')
     clearButton.enabled = this.selectedWords.length > 0
     sendButton.enabled = this.selectedWords.length > 0
+    hintButton.enabled = showHint
     clearButton.greyedOut = !allowActions
     sendButton.greyedOut = !this.haveWordsChanged && !currentlyAnimating
+    hintButton.greyedOut = !showHint
     if ((clearButton.clicked || game.keysPressed.KeyC) && allowActions && this.selectedWords.length > 0) {
       this.selectedWords = []
       this.haveWordsChanged = true
@@ -239,6 +253,22 @@ export default class UI extends Thing {
       else {
         game.getThings().filter(x => x instanceof Answer).forEach(x => x.skip())
       }
+    }
+    if (hintButton.clicked && showHint) {
+      let hintWords = new Set(game.getThing('saveDataManager').getHintWords())
+
+      for (const wordObject of game.getThings().filter(x => x instanceof Word)) {
+        if (hintWords.has(wordObject.word)) {
+          wordObject.isHint = true
+        }
+        else {
+          wordObject.isHint = false
+        }
+      }
+
+      this.lastUnlockedWord = this.time
+
+      soundmanager.playSound('hint', 0.8, 1.2)
     }
   }
 

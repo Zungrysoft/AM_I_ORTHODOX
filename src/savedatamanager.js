@@ -1,6 +1,7 @@
 import * as game from 'game'
 import * as u from 'utils'
 import Thing from 'thing'
+import * as soundmanager from 'soundmanager'
 import Word from './word.js'
 
 export default class SaveDataManager extends Thing {
@@ -73,9 +74,15 @@ export default class SaveDataManager extends Thing {
           ret.progressed.push(word)
           if (this.wordProgress[word] === 0) {
             ret.unlocked.push(word)
+
+            
           }
         }
       }
+
+      this.unHintAllWords()
+      const ui = game.getThing('ui')
+      ui.lastUnlockedWord = ui.time
 
       this.checkAdvanceGamePhase()
 
@@ -111,6 +118,62 @@ export default class SaveDataManager extends Thing {
 
   enableMusic() {
     this.isMusicEnabled = true
+  }
+
+  getHintWords() {
+    const answers = game.getThing('ui').answers
+    let unlockedWords = new Set()
+    let notUnlockedWords = new Set()
+    for (const word in this.wordProgress) {
+      if (this.wordProgress[word] === 0) {
+        unlockedWords.add(word)
+      }
+      if (this.wordProgress[word] && this.wordProgress[word] > 0) {
+        notUnlockedWords.add(word)
+      }
+    }
+    const possibleHints = []
+
+    // Iterate over all possible questions we could ask
+    for (const question in answers) {
+      if (!(answers[question] in this.receivedAnswers)) {
+        const questionWords = this.stripPunctuation(question).split(" ")
+        const wordSet = new Set(questionWords)
+
+        // If the question is askable...
+        if (wordSet.isSubsetOf(unlockedWords)) {
+          const answerWords = this.stripPunctuation(answers[question]).split(" ")
+          const answerSet = new Set(answerWords)
+
+          // And if the answer has words we can make progress on...
+          // Or if there are no words left to unlock...
+          if (notUnlockedWords.size === 0 || answerSet.intersection(notUnlockedWords).size > 0) {
+            // Add it to the list of possibilities
+            possibleHints.push(wordSet)
+          }
+        }
+      }
+    }
+
+    if (possibleHints.length === 0) {
+      return []
+    }
+    else {
+      return possibleHints[Math.floor(Math.random() * possibleHints.length)]
+    }
+  }
+
+  unHintAllWords() {
+    let didUnHint = false
+    for (const wordObject of game.getThings().filter(x => x instanceof Word)) {
+      if (wordObject.isHint) {
+        wordObject.isHint = false
+        didUnHint = true
+      }
+    }
+    if (didUnHint) {
+      soundmanager.playSound('hint', 0.8, 1.2)
+    }
   }
 
   writeToLocalStorage() {
