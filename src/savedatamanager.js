@@ -184,21 +184,25 @@ export default class SaveDataManager extends Thing {
         }
 
         while (true) {
-          let newWords = 0
+          let oldUnlockedWords = new Set(unlockedWords)
+          let newAnswers = 0
+          let newAnswersList = []
           for (const answer in answers) {
             if (!unlockedAnswers.has(answer)) {
               const answerWords = this.stripPunctuation(answer).split(" ")
               const wordSet = new Set(answerWords)
-              if (wordSet.isSubsetOf(unlockedWords)) {
+              if (wordSet.isSubsetOf(oldUnlockedWords)) {
                 // console.log(`asked "${answer}" and got "${answers[answer]}"`)
                 unlockedAnswers.add(answer)
+                newAnswers ++
+                newAnswersList.push(answer)
                 const answerTextWords = this.stripPunctuation(answers[answer]).split(" ")
                 for (const word of answerTextWords) {
                   if (wordCounts[word]) {
                     wordCounts[word] --
                     if (wordCounts[word] === 0) {
                       unlockedWords.add(word)
-                      newWords ++
+                      
                       // console.log(`word unlocked ${word}`)
                     }
                     else {
@@ -209,8 +213,13 @@ export default class SaveDataManager extends Thing {
               }
             }
           }
+          
+          console.log(`new answers found: ${newAnswers}`)
+          for (const na of newAnswersList) {
+            console.log("  " + na)
+          }
 
-          if (newWords === 0) {
+          if (newAnswers === 0) {
             break
           }
         }

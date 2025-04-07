@@ -2,7 +2,7 @@ import * as game from 'game'
 import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
-import { RED_ERROR, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
+import { PINK_LOCKED, RED_ERROR, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
 
 export const LETTER_SPACING = 26
 export const APOSTRAPHE_SPACING = 10

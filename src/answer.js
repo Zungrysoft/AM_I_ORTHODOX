@@ -3,7 +3,7 @@ import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
 import { APOSTRAPHE_SPACING, LETTER_SIZE, LETTER_SPACING, LINE_SPACING, WORD_SPACING } from './word.js'
-import { BLUE_LOCKED, GREY_OBTAINED } from './colors.js'
+import { BLUE_LOCKED, GREY_OBTAINED, PINK_LOCKED } from './colors.js'
 import LockParticle from './lockparticle.js'
 import Word from './word.js'
 
@@ -197,12 +197,13 @@ export default class Answer extends Thing {
   
         if (animEvent.type === "progress") {
           const pos = vec2.add(vec2.add(this.position, word.position), this.getLockPosition(word, word.locks))
-          game.addThing(new LockParticle(pos))
-          game.addThing(new LockParticle(pos))
-          game.addThing(new LockParticle(pos))
-          game.addThing(new LockParticle(pos))
-          game.addThing(new LockParticle(pos))
-          game.addThing(new LockParticle(pos))
+          const isSpecial = game.assets.data.specialWords[word.word]
+          game.addThing(new LockParticle(pos, isSpecial))
+          game.addThing(new LockParticle(pos, isSpecial))
+          game.addThing(new LockParticle(pos, isSpecial))
+          game.addThing(new LockParticle(pos, isSpecial))
+          game.addThing(new LockParticle(pos, isSpecial))
+          game.addThing(new LockParticle(pos, isSpecial))
           soundmanager.playSound('break2', 0.4, [1.4, 1.8])
           soundmanager.playSound('impact1', 0.4, 1.7)
           word.locks --
@@ -257,7 +258,7 @@ export default class Answer extends Thing {
       const locksRemaining = word.locks
       ctx.filter = GREY_OBTAINED;
       if (word.hasLocks) {
-        ctx.filter = BLUE_LOCKED;
+        ctx.filter = game.assets.data.specialWords[word.word] ? PINK_LOCKED : BLUE_LOCKED;
         ctx.save()
 
         let locksToDisplay = 0

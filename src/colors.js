@@ -3,3 +3,4 @@ export const YELLOW_SELECTED = 'brightness(0) invert(1) sepia(1) saturate(50) hu
 export const YELLOW_HIGHLIGHTED = 'brightness(0) invert(1) sepia(1) saturate(10) hue-rotate(0deg)';
 export const GREY_OBTAINED = 'brightness(0.55)';
 export const BLUE_LOCKED = 'sepia(1) invert(1) saturate(40%) hue-rotate(0deg) brightness(100)';
+export const PINK_LOCKED = 'sepia(1) invert(1) hue-rotate(120deg) brightness(3000000%) saturate(25%) brightness(200%)';
