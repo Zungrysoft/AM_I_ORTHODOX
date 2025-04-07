@@ -150,10 +150,6 @@ export default class Answer extends Thing {
       }
     }
 
-    if (game.keysPressed.KeyS) {
-      this.skip()
-    }
-
     if (this.animationPhase === 0) {
       this.animationCharacterTime --
 

@@ -205,12 +205,12 @@ export default class UI extends Thing {
     sendButton.enabled = this.selectedWords.length > 0
     clearButton.greyedOut = !allowActions
     sendButton.greyedOut = !this.haveWordsChanged && !currentlyAnimating
-    if (clearButton.clicked && allowActions) {
+    if ((clearButton.clicked || game.keysPressed.KeyC) && allowActions && this.selectedWords.length > 0) {
       this.selectedWords = []
       this.haveWordsChanged = true
       soundmanager.playSound('swipe', 0.9, 0.6)
     }
-    if (sendButton.clicked) {
+    if ((sendButton.clicked || game.keysPressed.KeyS) && this.selectedWords.length > 0) {
       if (!currentlyAnimating) {
         if (allowActions) {
           const questionText = this.selectedWords.map(x => x.word).join(' ')

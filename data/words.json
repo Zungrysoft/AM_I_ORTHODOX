@@ -35,7 +35,7 @@
     "my": { "count": 4, "types": ["adjective"] },
     "dead": { "count": 2, "types": ["adjective"] },
     "orthodox": { "count": 1, "types": ["adjective"] },
-    "hedonistic": { "count": 1, "types": ["adjective"] },
+    "hedonistic": { "count": 2, "types": ["adjective"] },
     "safe": { "count": 2, "types": ["adjective"] },
 
     "i": { "count": 0, "types": ["noun"] },
