@@ -20,6 +20,7 @@ export default class UI extends Thing {
   errorTime = 0
   blockTime = 0
   answers = {}
+  haveWordsChanged = true
 
   constructor() {
     super()
@@ -103,6 +104,7 @@ export default class UI extends Thing {
     this.errorTime --
     this.blockTime --
 
+    const currentlyAnimating = game.getThings().some(x => x instanceof Answer && x.animationPhase < 2)
     const allowActions = !game.getThings().some(x => x instanceof Answer && x.animationEvents.length > 0)
 
     // Figure out which word the user should be acting on
@@ -140,6 +142,7 @@ export default class UI extends Thing {
         if (activeWord.dragTime < 15 && allowActions) {
           if (this.selectedWords.includes(activeWord)) {
             this.selectedWords = this.selectedWords.filter(x => x !== activeWord)
+            this.haveWordsChanged = true
             soundmanager.playSound('swipe', 0.9, 0.6)
           }
           else {
@@ -149,6 +152,7 @@ export default class UI extends Thing {
             }
             else {
               this.selectedWords.push(activeWord)
+              this.haveWordsChanged = true
               soundmanager.playSound('swipe', 0.7, 1.0)
               soundmanager.playSound('click2', 0.2, [0.6, 0.7])
               soundmanager.playSound('block', 0.15, 0.7)
@@ -200,24 +204,35 @@ export default class UI extends Thing {
     clearButton.enabled = this.selectedWords.length > 0
     sendButton.enabled = this.selectedWords.length > 0
     clearButton.greyedOut = !allowActions
-    sendButton.greyedOut = !allowActions
+    sendButton.greyedOut = !this.haveWordsChanged && !currentlyAnimating
     if (clearButton.clicked && allowActions) {
       this.selectedWords = []
+      this.haveWordsChanged = true
       soundmanager.playSound('swipe', 0.9, 0.6)
     }
-    if (sendButton.clicked && allowActions) {
-      const questionText = this.selectedWords.map(x => x.word).join(' ')
-      const answerText = this.answers[questionText] ?? null
-      if (answerText) {
-        for (const answer of game.getThings().filter(x => x instanceof Answer)) {
-          answer.done = true
+    if (sendButton.clicked) {
+      if (!currentlyAnimating) {
+        if (allowActions) {
+          const questionText = this.selectedWords.map(x => x.word).join(' ')
+          const answerText = this.answers[questionText] ?? null
+          if (answerText) {
+            if (this.haveWordsChanged) {
+              for (const answer of game.getThings().filter(x => x instanceof Answer)) {
+                answer.done = true
+              }
+              game.addThing(new Answer(answerText, [10, game.getHeight() * 0.62]))
+              this.haveWordsChanged = false
+            }
+          }
+          else {
+            this.errorTime = ERROR_DURATION
+            this.blockTime = ERROR_DURATION
+            soundmanager.playSound('error', 0.9, 0.8)
+          }
         }
-        game.addThing(new Answer(answerText, [10, game.getHeight() * 0.62]))
       }
       else {
-        this.errorTime = ERROR_DURATION
-        this.blockTime = ERROR_DURATION
-        soundmanager.playSound('error', 0.9, 0.8)
+        game.getThings().filter(x => x instanceof Answer).forEach(x => x.skip())
       }
     }
   }

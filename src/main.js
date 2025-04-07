@@ -83,13 +83,14 @@ game.assets.sounds = await game.loadAudio({
   click2: 'sounds/click2.wav',
   swipe: 'sounds/swipe.wav',
   swoosh1: 'sounds/swoosh1.wav',
-  unlock: 'sounds/unlock.wav',
+  discover: 'sounds/discover.wav',
   break2: 'sounds/break2.wav',
   impact1: 'sounds/impact1.wav',
   newword1: 'sounds/newword1.wav',
   newword2: 'sounds/newword2.wav',
   error: 'sounds/error.wav',
   block: 'sounds/block.wav',
+  talk: 'sounds/talk.wav',
 })
 soundmanager.setSoundsTable(game.assets.sounds)
 

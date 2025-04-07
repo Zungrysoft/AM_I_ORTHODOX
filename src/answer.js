@@ -13,12 +13,15 @@ export default class Answer extends Thing {
   words = []
   wordLocks = []
   position = [0, 0]
-  desiredPositon = [0, 0]
-  donePosition = [0, 0]
   done = false
   isAnimating = false
+  animationCharacterTime = 0
+  animationWord = 0
+  animationCharacter = 0
+  animationPhase = 0
   animationEvents = []
   animationTime = 0
+  talkPhase = 0
 
   constructor(text, position) {
     super()
@@ -81,6 +84,7 @@ export default class Answer extends Thing {
 
       this.words.push({
         word: wordStr[i].word,
+        wordDisplay: "",
         locks: locksCount,
         hasLocks: knownWords[wordStr[i].word] ? false : !!locksCount,
         position: [pos + width/2, line * LINE_SPACING],
@@ -92,18 +96,10 @@ export default class Answer extends Thing {
         pos += WORD_SPACING
       }
     }
-    this.desiredPosition = [...position]
-    this.position = [
-      game.getWidth() + 100,
-      position[1],
-    ]
-    this.donePosition = [
-      -game.getWidth(),
-      position[1],
-    ]
+    this.position = [...position]
 
     const { progressed, unlocked, timesSeen } = game.getThing('saveDataManager').receivedAnswer(text)
-    let animationTiming = 120
+    let animationTiming = 80
     for (let i = 0; i < this.words.length; i ++) {
       if (this.words[i].hasLocks) {
         if (progressed.includes(this.words[i].word)) {
@@ -126,62 +122,112 @@ export default class Answer extends Thing {
     }
 
     // Sound effect
-    soundmanager.playSound('swoosh1', 0.6, 0.5)
     if (timesSeen === 1) {
-      soundmanager.playSound('unlock', 0.4, 1.1)
+      soundmanager.playSound('discover', 0.8, 0.7)
+    }
+  }
+
+  skip() {
+    if (this.animationPhase === 0) {
+      this.animationPhase = 1
+      
+      for (const word of this.words) {
+        word.wordDisplay = word.word
+      }
+    }
+    else if (this.animationPhase === 1) {
+      this.animationTime = this.animationEvents[0].time
     }
   }
 
   update() {
     if (this.done) {
+      this.animationPhase = 1
       this.animationTime = 9999999999
-      this.position = vec2.lerp(this.position, this.donePosition, 0.1)
-      if (this.animationEvents.length === 0 && vec2.distance(this.position, this.donePosition) < 1) {
+
+      if (this.animationEvents.length === 0) {
         this.isDead = true
       }
     }
-    else {
-      this.position = vec2.lerp(this.position, this.desiredPosition, 0.1)
+
+    if (game.keysPressed.KeyS) {
+      this.skip()
+    }
+
+    if (this.animationPhase === 0) {
+      this.animationCharacterTime --
+
+      if (this.animationCharacterTime <= 0) {
+        let curWord = this.words[this.animationWord]
+        let writeChar = curWord.word[this.animationCharacter]
+
+        curWord.wordDisplay += writeChar
+
+        this.animationCharacter ++
+        if (this.animationCharacter >= curWord.word.length) {
+          this.animationCharacter = 0
+          this.animationWord ++
+          if (this.animationWord >= this.words.length) {
+            this.animationPhase = 1
+          }
+        }
+
+        if (this.talkPhase % 4 === 0) {
+          soundmanager.playSound('talk', 0.2, 0.3)
+        }
+        this.talkPhase ++
+
+        if (['.', '!', '?'].includes(writeChar)) {
+          this.animationCharacterTime = 18
+        }
+        else if ([',', ':', ';'].includes(writeChar)) {
+          this.animationCharacterTime = 12
+        }
+        else {
+          this.animationCharacterTime = 1
+        }
+      }
+    }
+    else if (this.animationPhase === 1) {
+      if (this.animationEvents.length === 0) {
+        this.animationPhase = 2
+      }
 
       this.animationTime ++
 
-      if (game.keysPressed.KeyS) {
-        this.animationTime = 9999999999
-      }
-    }
-
-    if (this.animationEvents[0] && this.animationTime >= this.animationEvents[0].time) {
-      const animEvent = this.animationEvents.shift()
-      let word = this.words[animEvent.index]
-
-      if (animEvent.type === "progress") {
-        const pos = vec2.add(vec2.add(this.position, word.position), this.getLockPosition(word, word.locks))
-        game.addThing(new LockParticle(pos))
-        game.addThing(new LockParticle(pos))
-        game.addThing(new LockParticle(pos))
-        game.addThing(new LockParticle(pos))
-        game.addThing(new LockParticle(pos))
-        game.addThing(new LockParticle(pos))
-        soundmanager.playSound('break2', 0.4, [1.4, 1.8])
-        soundmanager.playSound('impact1', 0.4, 1.7)
-        word.locks --
-      }
-
-      if (animEvent.type === "unlock") {
-        const pos = vec2.add(this.position, word.position)
-        game.addThing(new Word(word.word, pos, [
-          Math.random() * game.getWidth() * 0.5 + game.getWidth() * 0.25,
-          Math.random() * game.getHeight() * 0.25 + game.getWidth() * 0.125,
-        ]))
-        soundmanager.playSound('swipe', 0.9, 1.0)
-        if (game.assets.data.specialWords[word.word]) {
-          soundmanager.playSound('newword2', 0.4, 0.7)
+      if (this.animationEvents[0] && this.animationTime >= this.animationEvents[0].time) {
+        const animEvent = this.animationEvents.shift()
+        let word = this.words[animEvent.index]
+  
+        if (animEvent.type === "progress") {
+          const pos = vec2.add(vec2.add(this.position, word.position), this.getLockPosition(word, word.locks))
+          game.addThing(new LockParticle(pos))
+          game.addThing(new LockParticle(pos))
+          game.addThing(new LockParticle(pos))
+          game.addThing(new LockParticle(pos))
+          game.addThing(new LockParticle(pos))
+          game.addThing(new LockParticle(pos))
+          soundmanager.playSound('break2', 0.4, [1.4, 1.8])
+          soundmanager.playSound('impact1', 0.4, 1.7)
+          word.locks --
         }
-        else {
-          soundmanager.playSound('newword1', 0.4, 0.9)
+  
+        if (animEvent.type === "unlock") {
+          const pos = vec2.add(this.position, word.position)
+          game.addThing(new Word(word.word, pos, [
+            Math.random() * game.getWidth() * 0.5 + game.getWidth() * 0.25,
+            Math.random() * game.getHeight() * 0.25 + game.getWidth() * 0.125,
+          ]))
+          soundmanager.playSound('swipe', 0.9, 1.0)
+          if (game.assets.data.specialWords[word.word]) {
+            soundmanager.playSound('newword2', 0.4, 0.7)
+          }
+          else {
+            soundmanager.playSound('newword1', 0.4, 0.9)
+          }
+          
+          word.hasLocks = false
         }
-        
-        word.hasLocks = false
       }
     }
   }
@@ -197,6 +243,10 @@ export default class Answer extends Thing {
 
   draw() {
     const { ctx } = game
+
+    if (this.done) {
+      return
+    }
     
     ctx.save()
     
@@ -212,19 +262,27 @@ export default class Answer extends Thing {
       ctx.filter = GREY_OBTAINED;
       if (word.hasLocks) {
         ctx.filter = BLUE_LOCKED;
-
         ctx.save()
 
+        let locksToDisplay = 0
+        if (word.wordDisplay.length === word.word.length) {
+          locksToDisplay = locksRemaining
+        }
+        else if (word.wordDisplay.length > 0) {
+          locksToDisplay = Math.min(Math.floor(word.wordDisplay.length * 3), locksRemaining)
+        }
+
         ctx.translate(-LETTER_SPACING / 2, 12)
-        for (let j = 0; j < locksRemaining; j ++) {
+        for (let j = 0; j < locksToDisplay; j ++) {
           ctx.drawImage(game.assets.images["ui_lock"], 0, 0)
           ctx.translate(LOCK_SPACING, 0)
         }
 
         ctx.restore()
+        
       }
 
-      for (const char of word.word) {
+      for (const char of word.wordDisplay) {
         if (char === '_') {
           continue
         }
