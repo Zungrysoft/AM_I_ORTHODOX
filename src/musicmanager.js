@@ -28,7 +28,7 @@ export default class MusicManager extends Thing {
       }
       this.oldMusicName = musicName
 
-      soundmanager.playMusic(musicName, 0.4)
+      soundmanager.playMusic(musicName, 0.6)
       this.phaseChangeTimer = -1
     }
   }

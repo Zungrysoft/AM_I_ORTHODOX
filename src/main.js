@@ -110,6 +110,7 @@ game.assets.sounds = await game.loadAudio({
 
   music1: 'sounds/track1.flac',
   music2: 'sounds/track2.flac',
+  music3: 'sounds/track3.flac',
 })
 soundmanager.setSoundsTable(game.assets.sounds)
 

@@ -93,7 +93,13 @@ export default class SaveDataManager extends Thing {
   }
 
   checkAdvanceGamePhase() {
-    if (this.isWordUnlocked('hate') || this.isWordUnlocked('james')) {
+    if (
+      this.isWordUnlocked('hate') ||
+      this.isWordUnlocked('fight') ||
+      this.isWordUnlocked('james') ||
+      this.isWordUnlocked('dominate') ||
+      (this.isWordUnlocked('competition') && this.isWordUnlocked('war'))
+    ) {
       this.advanceGamePhase(2)
     }
     if (
@@ -101,7 +107,7 @@ export default class SaveDataManager extends Thing {
       this.isWordUnlocked('sedate') ||
       (this.isWordUnlocked('thought') && this.isWordUnlocked('reconstruction') && this.isWordUnlocked('trap'))
     ) {
-      // this.advanceGamePhase(3)
+      this.advanceGamePhase(3)
     }
   }
 
