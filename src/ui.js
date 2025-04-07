@@ -6,6 +6,7 @@ import Word, { WORD_SPACING } from './word.js'
 import QuestionMark from './questionmark.js'
 import Button from './button.js'
 import Answer from './answer.js'
+import { GREY_OBTAINED } from './colors.js'
 
 const BUTTON_MARGIN = 10
 const ERROR_DURATION = 25
@@ -22,6 +23,7 @@ export default class UI extends Thing {
   answers = {}
   haveWordsChanged = true
   counterPos = [game.getWidth() - 116, -48]
+  counterTime = 60
 
   constructor() {
     super()
@@ -268,7 +270,10 @@ export default class UI extends Thing {
     const totalWords = u.clamp(game.getThing('saveDataManager').totalWords, 0, 99)
 
     if (unlockedWords > 4) {
-      this.counterPos[1] = u.lerp(this.counterPos[1], 8, 0.1)
+      this.counterTime --
+      if (this.counterTime < 0) {
+        this.counterPos[1] = u.lerp(this.counterPos[1], 8, 0.1)
+      }
     }
 
     let digits = [
@@ -279,6 +284,7 @@ export default class UI extends Thing {
       totalWords % 10,
     ]
 
+    ctx.filter = GREY_OBTAINED
     ctx.translate(...this.counterPos)
 
     for (const digit of digits) {
