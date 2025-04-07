@@ -10,7 +10,7 @@
 
     "am": { "count": 0, "types": ["verb", "aux"] },
     "are": { "count": 1, "types": ["verb", "aux"] },
-    "is": { "count": 1, "types": ["verb", "aux"] },
+    "is": { "count": 2, "types": ["verb", "aux"] },
     "was": { "count": 4, "types": ["verb", "aux"] },
     "did": { "count": 3, "types": ["verb", "aux"] },
     "do": { "count": 3, "types": ["verb", "aux"] },
