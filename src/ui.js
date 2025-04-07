@@ -56,14 +56,21 @@ export default class UI extends Thing {
         if (question.includes("/")) {
           const splitAnswers = this.splitAnswer(question)
           for (const splitAnswer of splitAnswers) {
-            this.answers[splitAnswer] = game.assets.data.answers[questionStart].toLowerCase()
+            this.addAnswer(splitAnswer, game.assets.data.answers[questionStart].toLowerCase())
           }
         }
         else {
-          this.answers[question] = game.assets.data.answers[questionStart].toLowerCase()
+          this.addAnswer(question, game.assets.data.answers[questionStart].toLowerCase())
         }
       }
     }
+  }
+
+  addAnswer(question, answer) {
+    if (question in this.answers) {
+      console.warn(`Warning: duplicate question found: ${question}`)
+    }
+    this.answers[question] = answer
   }
 
   splitAnswer(answer) {

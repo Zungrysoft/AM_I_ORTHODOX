@@ -29,10 +29,8 @@
     "inheritance": { "count": 2, "types": ["noun"] },
     "rich": { "count": 2, "types": ["noun", "adjective"] },
     "poor": { "count": 2, "types": ["noun", "adjective"] },
-    "everyone": { "count": 3, "types": ["noun", "adjective"] },
     "thought": { "count": 3, "types": ["noun"] },
     "sedate": { "count": 1, "types": ["verb"] },
-    "operation": { "count": 2, "types": ["noun"] },
 
     "my": { "count": 4, "types": ["adjective"] },
     "dead": { "count": 2, "types": ["adjective"] },
