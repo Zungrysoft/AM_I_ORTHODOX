@@ -66,11 +66,12 @@ game.assets.images = await game.loadImages({
   symbol_semicolon: 'images/symbol_semicolon.png',
   symbol_colon: 'images/symbol_colon.png',
   ui_background: 'images/ui_background.png',
-  ui_pan: 'images/ui_pan.png',
   ui_send: 'images/ui_send.png',
   ui_erase: 'images/ui_erase.png',
   ui_lock: 'images/ui_lock.png',
   ui_lock_particle: 'images/ui_lock_particle.png',
+  ui_success_particle: 'images/ui_success_particle.png',
+  ui_smoke_particle: 'images/ui_smoke_particle.png',
 })
 
 game.assets.data = await game.loadJson({

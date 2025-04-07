@@ -5,6 +5,7 @@ import Thing from 'thing'
 import { BLUE_LOCKED, PINK_LOCKED } from './colors.js'
 
 export default class LockParticle extends Thing {
+  position = [0, 0]
   velocity = [0, 0]
 
   constructor(position, isSpecial) {

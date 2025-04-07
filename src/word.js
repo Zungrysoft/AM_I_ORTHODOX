@@ -1,8 +1,11 @@
 import * as game from 'game'
+import * as u from 'utils'
 import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
 import { PINK_LOCKED, RED_ERROR, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
+import SuccessParticle from './successparticle.js'
+import SmokeParticle from './smokeparticle.js'
 
 export const LETTER_SPACING = 26
 export const APOSTRAPHE_SPACING = 10
@@ -16,6 +19,7 @@ export const DRIFT_CHANGE_RATE = 180
 export const DRIFT_CHANGE_RATE_VARIANCE = 100
 export const BOUND_CORRECTION_FORCE = 0.02
 export const LINE_SPACING = 52
+export const FLASH_DURATION = 25
 
 export default class Word extends Thing {
   word = "zyxzyxzyx"
@@ -29,6 +33,7 @@ export default class Word extends Thing {
   isHighlighted = false
   mustReturnToOriginalPosition = false
   dragTime = 0
+  flashTime = 0
 
   constructor(word, position, originalPosition) {
     super()
@@ -68,6 +73,11 @@ export default class Word extends Thing {
     return Math.max(xSep, ySep);
   }
 
+  releaseSuccessParticles(index) {
+    this.flashOffset = Math.floor(FLASH_DURATION * 0.4 * index)
+    this.flashTime = 0
+  }
+
   update() {
     if (this.isBeingDragged) {
       this.dragTime ++
@@ -75,6 +85,8 @@ export default class Word extends Thing {
     else {
       this.dragTime = 0
     }
+
+    this.flashTime ++
 
     if (this.isSelected) {
       this.position = vec2.lerp(this.position, this.selectedPosition, 0.1)
@@ -170,6 +182,12 @@ export default class Word extends Thing {
     
     ctx.translate(...this.position)
     ctx.translate(...vec2.scale(this.getSize(), -0.5))
+
+    if (this.flashTime >= this.flashOffset && this.flashTime < this.flashOffset + FLASH_DURATION) {
+      const flashPoint = this.flashTime - this.flashOffset
+      ctx.translate(0, Math.sin(Math.PI * (flashPoint / FLASH_DURATION)) * -28)
+    }
+    
 
     if (this.isSelected) {
       if (game.getThing('ui').errorTime > 0) {

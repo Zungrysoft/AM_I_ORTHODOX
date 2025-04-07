@@ -124,6 +124,11 @@ export default class Answer extends Thing {
     // Sound effect
     if (timesSeen === 1) {
       soundmanager.playSound('discover', 0.8, 0.7)
+
+      const wordObjects = game.getThing('ui').selectedWords
+      for (let j = 0; j < wordObjects.length; j ++) {
+        wordObjects[j].releaseSuccessParticles(j)
+      }
     }
   }
 
