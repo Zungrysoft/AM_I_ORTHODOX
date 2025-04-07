@@ -6,7 +6,8 @@
     "who are you": "i am your savior. i am here to make a new, better version of you.",
     "where are you": "i am in my office, doing what i must for the economy. soon you will be doing so as well.",
     "what are you": "i am the chairman of riedel industries. the most value adding director in its history. my strongly orthodox mindset maintains stock holder confidence.",
-    "who is here": "you are the only one there.",
+    "who is here|who is in here": "you are the only one there.",
+    "what/where is here": "by here, i mean your new office in riedel that you currently occupy. it was in fact my old office, so be careful with it. it has a sentimental value.",
     "did/do you know me|did/do i know you": "of course. i am your brother.",
     "who did/do i know": "probably not many people. you have always been shy. like a recluse in that wretched shack of yours. the only person i ever knew you to fraternize with frequently was james.",
     "where was i": "you lived in a small, poorly-kept house in arizona.",
@@ -25,7 +26,7 @@
     "is orthodox dead": "orthodoxy is not just alive, it represents all of the ideals of our modern world. the old era was rife with indulgence and hedonism.",
     "is hedonistic dead": "i long for the day when hedonism is finally dead. but that day is likely far in the future. i only hope i that i did succeed in killing it in you.",
     "what is hedonistic": "hedonism is an insidious inversion of values which claims that economic growth exists to serve personal pleasure. in other words, to put comfort above one's duty to the economy.",
-    "who here is orthodox|who here is hedonistic": "i only hire orthodox employees. you would do well to maintain that thought as you proceed.",
+    "who here is orthodox|who here is hedonistic|who is orthodox here|who is hedonistic here": "i only hire orthodox employees. you would do well to maintain that thought as you proceed.",
     "did/do you make orthodox|did/do you make america orthodox": "i wish i did. no, orthodoxy was a long time coming.",
     "did/do i make hedonistic|did/do i make america hedonistic": "no, you are merely a symptom of a larger disease within america.",
 
@@ -57,6 +58,7 @@
     "who did mother make": "we were her only two children.",
     "why/how is/was mother dead": "it was just her time. there isn't always a reason why.",
     "what did mother make": "she was the chairman of schultz munitions. they built rifles.",
+    "was i in mother": "you were in mother for nine months. i was in her for eight.",
 
     "did mother make me orthodox": "she tried, bless her. but you refused to be saved and i do not understand why.",
     "did mother make you orthodox": "i credit my upbringing in large part for who i am today.",
@@ -263,9 +265,10 @@
 
     "why did you trap me|why make this trap|did you trap me": "i had to. it was the only way to get you to come anywhere near me.",
     "how did you trap me|what is/was the trap": "i told you our mother's estate had been paid out from a recent settlement which meant you got another $5000. when you arrived to pick it up, i wrestled you to the ground to sedate you.",
-    "when did you trap me": "after i had perfected the thought reconstruction operation. i wanted you to be my first test subject.",
+    "when did you trap me|when was the trap": "after i had perfected the thought reconstruction operation. i wanted you to be my first test subject.",
     "did the inheritance trap me": "it was the perfect bait. another payout of money you did not deserve.",
     "who did you trap": "i trapped you. outsmarted you. this time you were not one step ahead.",
+    "where did you trap me|where was the trap": "i brought you to riedel industries to trap you.",
 
     "why did you sedate me|did you sedate me|did you make me sedate": "you had to be sedated for me to perform the thought reconstruction.",
     "how did you sedate me": "i pinned you down and injected you with an anesthetic. you fought valiantly, which reassured me that this would work.",
