@@ -221,6 +221,11 @@ export default class SaveDataManager extends Thing {
         this.writeToLocalStorage()
       }
 
+      // Cheat to skip the wait for a hint
+      if (game.keysPressed.KeyH) {
+        game.getThing('ui').lastUnlockedWord = -99999
+      }
+
       // List all possible words
       if (game.keysPressed.KeyL) {
         let wordList = []
