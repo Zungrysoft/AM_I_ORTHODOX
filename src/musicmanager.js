@@ -10,7 +10,6 @@ export default class MusicManager extends Thing {
 
   update() {
     const newPhase = game.getThing('saveDataManager').getGamePhase()
-    console.log(newPhase)
 
     if (newPhase !== this.curPhase) {
       this.curPhase = newPhase
