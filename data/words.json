@@ -32,7 +32,7 @@
     "thought": { "count": 3, "types": ["noun"] },
     "sedate": { "count": 1, "types": ["verb"] },
     "leave": { "count": 3, "types": ["verb"] },
-    "dominate": { "count": 3, "types": ["verb"] },
+    "dominate": { "count": 2, "types": ["verb"] },
 
     "dead": { "count": 2, "types": ["adjective"] },
     "orthodox": { "count": 1, "types": ["adjective"] },
