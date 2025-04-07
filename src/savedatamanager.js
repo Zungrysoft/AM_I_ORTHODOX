@@ -41,6 +41,7 @@ export default class SaveDataManager extends Thing {
   receivedAnswer(answer) {
     if (this.receivedAnswers[answer]) {
       this.receivedAnswers[answer] ++
+      this.checkAdvanceGamePhase()
       return {
         progressed: [],
         unlocked: [],
@@ -74,9 +75,24 @@ export default class SaveDataManager extends Thing {
         }
       }
 
+      this.checkAdvanceGamePhase()
+
       this.writeToLocalStorage()
 
       return ret
+    }
+  }
+
+  checkAdvanceGamePhase() {
+    if (this.isWordUnlocked('hate') || this.isWordUnlocked('james')) {
+      this.advanceGamePhase(2)
+    }
+    if (
+      this.isWordUnlocked('deserve') ||
+      this.isWordUnlocked('sedate') ||
+      (this.isWordUnlocked('thought') && this.isWordUnlocked('reconstruction') && this.isWordUnlocked('trap'))
+    ) {
+      // this.advanceGamePhase(3)
     }
   }
 
@@ -98,31 +114,27 @@ export default class SaveDataManager extends Thing {
   writeToLocalStorage() {
     localStorage.setItem('wordProgress', JSON.stringify(this.wordProgress));
     localStorage.setItem('receivedAnswers', JSON.stringify(this.receivedAnswers));
-    localStorage.setItem('gamePhase', this.gamePhase);
   }
 
   readFromLocalStorage() {
     const readWordProgress = JSON.parse(localStorage.getItem('wordProgress'));
     const readReceivedAnswers = JSON.parse(localStorage.getItem('receivedAnswers'));
-    const readGamePhase = Number(localStorage.getItem('gamePhase')) || 1;
 
+    // Read from local storage
     if (readWordProgress != null && readReceivedAnswers != null) {
       this.wordProgress = readWordProgress;
       this.receivedAnswers = readReceivedAnswers;
-      this.gamePhase = readGamePhase;
     }
+    // Default values
     else {
-      this.resetLocalStorage()
+      this.wordProgress = game.assets.data.words
+      for (const word in this.wordProgress) {
+        this.wordProgress[word] = this.wordProgress[word].count
+      }
+      this.receivedAnswers = {}
     }
-  }
 
-  resetLocalStorage() {
-    this.wordProgress = game.assets.data.words
-    for (const word in this.wordProgress) {
-      this.wordProgress[word] = this.wordProgress[word].count
-    }
-    this.receivedAnswers = {}
-    this.gamePhase = 1
+    this.checkAdvanceGamePhase()
   }
 
   update() {
