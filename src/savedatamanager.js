@@ -188,12 +188,12 @@ export default class SaveDataManager extends Thing {
           let newAnswers = 0
           let newAnswersList = []
           for (const answer in answers) {
-            if (!unlockedAnswers.has(answer)) {
+            if (!unlockedAnswers.has(answers[answer])) {
               const answerWords = this.stripPunctuation(answer).split(" ")
               const wordSet = new Set(answerWords)
               if (wordSet.isSubsetOf(oldUnlockedWords)) {
                 // console.log(`asked "${answer}" and got "${answers[answer]}"`)
-                unlockedAnswers.add(answer)
+                unlockedAnswers.add(answers[answer])
                 newAnswers ++
                 newAnswersList.push(answer)
                 const answerTextWords = this.stripPunctuation(answers[answer]).split(" ")
