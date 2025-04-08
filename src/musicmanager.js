@@ -31,16 +31,17 @@ export default class MusicManager extends Thing {
       if (this.oldMusicName) {
         game.assets.sounds[this.oldMusicName]?.pause()
       }
-      this.oldMusicName = musicName
 
       if (this.curPhase > 0 && this.curPhase <= 3) {
         soundmanager.playMusic(musicName, 0.6)
 
         // Phase 2 sound effect
-        if (this.curPhase === 2) {
-          soundmanager.playSound('stringhit', 1.0, 1.0)
+        if (this.curPhase === 2 && this.oldMusicName === 'music1') {
+          soundmanager.playSound('musicchange', 1.0, 1.0)
         }
       }
+
+      this.oldMusicName = musicName
       this.phaseChangeTimer = -1
     }
   }
