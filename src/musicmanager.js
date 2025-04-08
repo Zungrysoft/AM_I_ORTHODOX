@@ -9,11 +9,16 @@ export default class MusicManager extends Thing {
   phaseChangeTimer = -1
 
   update() {
-    const newPhase = game.getThing('saveDataManager').getGamePhase()
+
+    if (game.keysPressed.KeyM) {
+      this.isMusicMuted = !this.isMusicMuted
+    }
+
+    const newPhase = this.isMusicMuted ? 0 : game.getThing('saveDataManager').getGamePhase()
 
     if (newPhase !== this.curPhase) {
       this.curPhase = newPhase
-      this.phaseChangeTimer = PHASE_CHANGE_DELAY
+      this.phaseChangeTimer = this.isMusicMuted ? 0 : PHASE_CHANGE_DELAY
     }
 
     if (this.phaseChangeTimer > 0) {
@@ -24,11 +29,13 @@ export default class MusicManager extends Thing {
 
       // Pause previous track
       if (this.oldMusicName) {
-        game.assets.sounds[this.oldMusicName].pause()
+        game.assets.sounds[this.oldMusicName]?.pause()
       }
       this.oldMusicName = musicName
 
-      soundmanager.playMusic(musicName, 0.6)
+      if (this.curPhase > 0 && this.curPhase <= 3) {
+        soundmanager.playMusic(musicName, 0.6)
+      }
       this.phaseChangeTimer = -1
     }
   }
