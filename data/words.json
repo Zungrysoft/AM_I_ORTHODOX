@@ -17,7 +17,7 @@
     "in": { "count": 5, "types": ["verb", "aux"] },
 
     "make": { "count": 3, "types": ["verb"] },
-    "deserve": { "count": 4, "types": ["verb"] },
+    "deserve": { "count": 3, "types": ["verb"] },
     "know": { "count": 3, "types": ["verb"] },
     "hate": { "count": 2, "types": ["verb", "noun"] },
     "competition": { "count": 2, "types": ["noun"] },
