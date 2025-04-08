@@ -165,6 +165,22 @@ export default class SaveDataManager extends Thing {
       return []
     }
     else {
+      // Prefer answers that use main path words
+      if (Math.random() < 0.5) {
+        let goodPossibleHints = []
+        for (const hintPossibility of possibleHints) {
+          for (const w of hintPossibility) {
+            if (w === 'trap' || w === 'sedate' || w === 'deserve') {
+              goodPossibleHints.push(hintPossibility)
+              break
+            }
+          }
+        }
+
+        if (goodPossibleHints.length > 0) {
+          return goodPossibleHints[Math.floor(Math.random() * goodPossibleHints.length)]
+        }
+      }
       return possibleHints[Math.floor(Math.random() * possibleHints.length)]
     }
   }
