@@ -166,7 +166,7 @@ export default class SaveDataManager extends Thing {
     }
     else {
       // Prefer answers that use main path words
-      if (Math.random() < 0.5) {
+      if (Math.random() < 0.6) {
         let goodPossibleHints = []
         for (const hintPossibility of possibleHints) {
           for (const w of hintPossibility) {
