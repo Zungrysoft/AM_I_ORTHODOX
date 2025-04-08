@@ -35,6 +35,11 @@ export default class MusicManager extends Thing {
 
       if (this.curPhase > 0 && this.curPhase <= 3) {
         soundmanager.playMusic(musicName, 0.6)
+
+        // Phase 2 sound effect
+        if (this.curPhase === 2) {
+          
+        }
       }
       this.phaseChangeTimer = -1
     }
