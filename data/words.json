@@ -6,8 +6,6 @@
     "why": { "count": 4, "types": ["interrogative"] },
     "how": { "count": 3, "types": ["interrogative"] },
 
-    "the": { "count": 3, "types": ["article"] },
-
     "am": { "count": 0, "types": ["verb", "aux"] },
     "are": { "count": 1, "types": ["verb", "aux"] },
     "is": { "count": 2, "types": ["verb", "aux"] },
