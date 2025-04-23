@@ -10,6 +10,7 @@ export default class SaveDataManager extends Thing {
   gamePhase = 1
   isMusicEnabled = false
   totalWords = 0
+  didEnding = false
 
   constructor() {
     super()
@@ -90,6 +91,11 @@ export default class SaveDataManager extends Thing {
 
       return ret
     }
+  }
+
+  setDidEnding() {
+    this.didEnding = true
+    this.writeToLocalStorage()
   }
 
   checkAdvanceGamePhase() {
@@ -201,16 +207,19 @@ export default class SaveDataManager extends Thing {
   writeToLocalStorage() {
     localStorage.setItem('wordProgress', JSON.stringify(this.wordProgress));
     localStorage.setItem('receivedAnswers', JSON.stringify(this.receivedAnswers));
+    localStorage.setItem('didEnding', JSON.stringify(this.didEnding ?? false));
   }
 
   readFromLocalStorage() {
     const readWordProgress = JSON.parse(localStorage.getItem('wordProgress'));
     const readReceivedAnswers = JSON.parse(localStorage.getItem('receivedAnswers'));
+    const didEnding = JSON.parse(localStorage.getItem('didEnding'));
 
     // Read from local storage
     if (readWordProgress != null && readReceivedAnswers != null) {
       this.wordProgress = readWordProgress;
       this.receivedAnswers = readReceivedAnswers;
+      this.didEnding = didEnding ?? false
     }
     // Default values
     else {
@@ -219,6 +228,7 @@ export default class SaveDataManager extends Thing {
         this.wordProgress[word] = this.wordProgress[word].count
       }
       this.receivedAnswers = {}
+      this.didEnding = false
     }
 
     this.checkAdvanceGamePhase()
@@ -232,6 +242,7 @@ export default class SaveDataManager extends Thing {
       if (game.keysPressed.KeyP) {
         localStorage.removeItem('wordProgress');
         localStorage.removeItem('receivedAnswers');
+        localStorage.removeItem('didEnding');
       }
 
       // Cheat all words
@@ -258,6 +269,11 @@ export default class SaveDataManager extends Thing {
         }
         const shuffledList = u.shuffle(wordList, Math.random)
         console.log(shuffledList.join("\n"))
+      }
+
+      // Trigger ending
+      if (game.keysPressed.KeyE) {
+        game.getThing('ui').endingSequence()
       }
 
       // Run simulator

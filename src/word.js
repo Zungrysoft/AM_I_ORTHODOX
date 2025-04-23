@@ -35,6 +35,8 @@ export default class Word extends Thing {
   dragTime = 0
   flashTime = 0
   isHint = false
+  isDying = false
+  dyingAlpha = 1.0
 
   constructor(word, position, originalPosition) {
     super()
@@ -85,6 +87,13 @@ export default class Word extends Thing {
     }
     else {
       this.dragTime = 0
+    }
+
+    if (this.isDying) {
+      this.dyingAlpha -= 0.005
+      if (this.dyingAlpha < 0) {
+        this.isDead = true
+      }
     }
 
     this.flashTime ++
@@ -200,6 +209,10 @@ export default class Word extends Thing {
     
     ctx.translate(...this.position)
     ctx.translate(...vec2.scale(this.getSize(), -0.5))
+
+    if (this.isDying) {
+      ctx.globalAlpha = Math.pow(Math.floor(this.dyingAlpha * 10) / 10, 1.3);
+    }
 
     if (this.flashTime >= this.flashOffset && this.flashTime < this.flashOffset + FLASH_DURATION) {
       const flashPoint = this.flashTime - this.flashOffset

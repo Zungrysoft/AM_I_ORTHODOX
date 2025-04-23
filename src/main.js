@@ -108,6 +108,8 @@ game.assets.sounds = await game.loadAudio({
   error: 'sounds/error.wav',
   block: 'sounds/block.wav',
   talk: 'sounds/talk.wav',
+  hate: 'sounds/hate.wav',
+  hate2: 'sounds/hate2.wav',
   hint: 'sounds/hint.wav',
   musicchange: 'sounds/musicchange.wav',
 

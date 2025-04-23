@@ -19,7 +19,7 @@
     "why was/am i hedonistic": "i wish i knew. we both had the same upbringing, but i succeeded while you went on to do nothing worth mentioning.",
     "was/am i hedonistic|how hedonistic am i": "nine years i watched you, while you lived a life devoid of purpose. someone of my standing could not sit idly by sharing a name with a non-worker. our world demands growth, not stagnation.",
     "are you hedonistic": "my purpose is to make, not to consume. to dominate the competition, not to be content with my place.",
-    "who is hedonistic": "non-workers, freeloaders, and bums. not even worth the skin off my knuckles.",
+    "who is hedonistic": "non-workers, freeloaders, and bums. in other words, people like james.",
     "who is orthodox": "all of the great men of industry and those who answer when they are called to employ.",
     "what is orthodox": "orthodoxy means to uphold the values of free market enterprise and ruthless competition and to do away with regulation that stifles ingenuity.",
     "is orthodox hedonistic|is hedonistic orthodox": "the two concepts are in perfect diametric opposition. i do not know how one would confuse them.",
@@ -95,7 +95,7 @@
 
     "what is/was war": "the great war of the early 20th century. it started with the assassination of archduke franz ferdinand and ended with thousands of germans and austrians on our soil.",
     "what is/was reconstruction": "it was our second industrial revolution. the effort to rebuild the east coast of america after the war.",
-    "when was war": "it went from july 28th, 1914 to august 9th, 1935 when we forced the germans to retreat. still, the reconstruction took over a decade.",
+    "when was/is war": "it went from july 28th, 1914 to august 9th, 1935 when we forced the germans to retreat. still, the reconstruction took over a decade.",
     "how was war|did i/you fight war|was i in war": "we did not fight in the war; we were too young. but i understand it was the most brutal and destructive war in the history of america.",
     "is/was war safe": "the war dead from america was in the millions. so no, i would not say it was safe war, whatever that means.",
     "where was war": "it was mostly in europe for the first decade, then as the germans got a safe foothold over western europe, they attacked america by launching an invasion on our east coast.",
@@ -213,7 +213,7 @@
     "did james hate you|mother": "i do not think he had it in him.",
     "did/do i know james|did james know me|who is/was james": "you were best friends. i asked you several times why you liked him. you told me he was the only person in this world you knew you could trust.",
     "was/is james orthodox": "certainly not. unfortunately, i think that is why the two of you got along; you both dabbled in resisting the inevitable shift in america toward free market orthodoxy.",
-    "was/is james hedonistic": "i do not think he ever went that far. but i know he was certainly not orthodox.",
+    "was/is james hedonistic": "hedonism coursed through his veins. and it became worse as he got older, more rebellious.",
     "is james safe|how/where is james": "james is dead.",
     "is james dead": "yes. he died about 20 years ago.",
     "why/how is/was james dead": "he was killed during the war. he was visiting his home town when it was bombed by the germans. poor kid.",
@@ -313,8 +313,8 @@
     "who is dead": "mother died almost nine years ago. james died during the war.",
     "how did you do this": "it was a trap i set up.",
     "did you make me dead": "only in a figurative sense.",
-    "am i you": "we most certainly are not the same person. that is the truth.",
-    "are you me": "am not your inner monologue, if that is what you are asking",
+    "am i you": "am not your inner monologue, if that is what you are asking.",
+    "are you me": "we most certainly are not the same person.",
     "did mother deserve me": "no mother deserves that.",
     "is this trap": "the trap has already happened. now begins your thought reconstruction.",
     "did/do i deserve james": "you deserved someone who would strengthen you, not make you complacent.",
@@ -340,5 +340,7 @@
     "did/do i deserve this": "can think of nobody more deserving than you. nobody else who has your ability and your lack of will to use it. let this happen.",
     "did i deserve this trap": "it needed to be done, whether you knew it or not. and when it is finished, you will be happy it was done. let this happen.",
     "do/did i deserve thought reconstruction": "you were the perfect candidate for it. the one who has the most to gain from being taught to be orthodox. let this happen.",
-    "what do i deserve": "to emerge from the wretched cocoon you have locked yourself in and reach your full potential unhampered by your past naive, utopian thought processes. let this happen."
+    "what do i deserve": "to emerge from the wretched cocoon you have locked yourself in and reach your full potential unhampered by your past naive, utopian thought processes. let this happen.",
+
+    "yes": "excellent. then welcome back to the fight, brother."
 }

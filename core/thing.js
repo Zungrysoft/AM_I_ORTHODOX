@@ -60,6 +60,7 @@ export default class Thing {
   }
 
   setTimer (name, time, action = () => {}) {
+    console.log(name, time, action)
     this.#timers[name] = { time, start: time, action }
   }
 

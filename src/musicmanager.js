@@ -18,7 +18,7 @@ export default class MusicManager extends Thing {
 
     if (newPhase !== this.curPhase) {
       this.curPhase = newPhase
-      this.phaseChangeTimer = this.isMusicMuted ? 0 : PHASE_CHANGE_DELAY
+      this.phaseChangeTimer = this.isMusicMuted || newPhase > 3 ? 0 : PHASE_CHANGE_DELAY
     }
 
     if (this.phaseChangeTimer > 0) {

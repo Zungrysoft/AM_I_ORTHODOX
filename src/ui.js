@@ -7,6 +7,7 @@ import QuestionMark from './questionmark.js'
 import Button from './button.js'
 import Answer from './answer.js'
 import { GREY_OBTAINED } from './colors.js'
+import Credits from './credits.js'
 
 const BUTTON_MARGIN = 10
 const ERROR_DURATION = 25
@@ -27,6 +28,8 @@ export default class UI extends Thing {
   counterTime = 60
   lastUnlockedWord = 0
   time = 0
+  endingStage = 0
+  endingTime = 0
 
   constructor() {
     super()
@@ -113,27 +116,34 @@ export default class UI extends Thing {
   }
 
   update() {
+    const saveDataManager = game.getThing('saveDataManager')
+
     this.errorTime --
     this.blockTime --
     this.time ++
+    if (this.isInEnding) {
+      this.endingTime ++
+    }
 
     const currentlyAnimating = game.getThings().some(x => x instanceof Answer && x.animationPhase < 2)
-    const allowActions = !game.getThings().some(x => x instanceof Answer && x.animationEvents.length > 0)
-    const showHint = this.time - this.lastUnlockedWord > HINT_TIME
+    const allowActions = !game.getThings().some(x => x instanceof Answer && x.animationEvents.length > 0) && !this.lockActions
+    const showHint = this.time - this.lastUnlockedWord > HINT_TIME && !this.isInEnding
 
     // Figure out which word the user should be acting on
     let activeWord = null
-    for (const word of this.getAllWords()) {
-      if (word.isBeingDragged) {
-        activeWord = word
-        break
-      }
-    }
-    if (!activeWord && !(game.getThings().some(x => x instanceof Button && x.isHighlighted))) {
+    if (!this.lockActions) {
       for (const word of this.getAllWords()) {
-        if (u.pointInsideAabb(...game.mouse.position, word.getAabb())) {
+        if (word.isBeingDragged && !word.isDying) {
           activeWord = word
           break
+        }
+      }
+      if (!activeWord && !(game.getThings().some(x => x instanceof Button && x.isHighlighted))) {
+        for (const word of this.getAllWords()) {
+          if (u.pointInsideAabb(...game.mouse.position, word.getAabb()) && !word.isDying) {
+            activeWord = word
+            break
+          }
         }
       }
     }
@@ -192,7 +202,9 @@ export default class UI extends Thing {
     // Move selected words into place
     let questionMark = game.getThing('questionMark')
     if (this.selectedWords.length > 0) {
-      questionMark.isSelected = true
+      if (!this.isInEnding) {
+        questionMark.isSelected = true
+      }
 
       let selectedWordsExtended = [...this.selectedWords, questionMark]
 
@@ -231,16 +243,35 @@ export default class UI extends Thing {
       if (!currentlyAnimating) {
         if (allowActions) {
           const questionText = this.selectedWords.map(x => x.word).join(' ')
-          const answerText = this.answers[questionText] ?? null
-          if (answerText) {
+          let answerText = this.answers[questionText] ?? null
+
+          if (this.endingStage > 0 && this.endingStage < 7) {
+            answerText = this.endingAnswerText(answerText, this.endingStage)
+          }
+
+          if (this.endingStage === 7) {
+            this.endingSequence()
+          }
+          else if (answerText) {
             if (this.haveWordsChanged) {
               for (const answer of game.getThings().filter(x => x instanceof Answer)) {
                 answer.done = true
               }
+
               game.addThing(new Answer(answerText, [10, game.getHeight() * 0.62]))
               this.haveWordsChanged = false
 
-              game.getThing('saveDataManager').enableMusic()
+              saveDataManager.enableMusic()
+
+              // Trigger game ending sequence
+              if (answerText.includes('let this happen') && (!saveDataManager.didEnding)) {
+                this.endingStage ++
+              }
+
+              // Trigger credits sequence
+              if (this.endingStage === 100) {
+                this.creditsSequence()
+              }
             }
           }
           else {
@@ -255,7 +286,7 @@ export default class UI extends Thing {
       }
     }
     if (hintButton.clicked && showHint) {
-      let hintWords = new Set(game.getThing('saveDataManager').getHintWords())
+      let hintWords = new Set(saveDataManager.getHintWords())
 
       for (const wordObject of game.getThings().filter(x => x instanceof Word)) {
         if (hintWords.has(wordObject.word)) {
@@ -270,6 +301,77 @@ export default class UI extends Thing {
 
       soundmanager.playSound('hint', 0.8, 1.2)
     }
+
+    if (this.endingTime === 60 * 5) {
+      game.addThing(new Answer("will you be orthodox?", [10, game.getHeight() * 0.62]));
+    }
+    else if (this.endingTime === 60 * 8) {
+      game.addThing(new Word("yes", [-64, game.getHeight() * 0.2]));
+      game.addThing(new Word("no", [game.getWidth() + 64, game.getHeight() * 0.4]));
+    }
+  }
+
+  endingSequence() {
+    game.getThing('saveDataManager').advanceGamePhase(4);
+    this.endingStage = 100;
+    this.isInEnding = true
+    this.selectedWords = []
+    game.getThings().filter(x => x instanceof Answer).forEach(x => x.isDead = true)
+
+    for (const word of game.getThings().filter(x => x instanceof Word)) {
+      word.isDying = true
+    }
+  }
+
+  endingAnswerText(text, count) {
+    if (count === 4) {
+      return "let this happen.";
+    }
+    if (count === 5) {
+      return "let this happen, brother.";
+    }
+    if (count === 6) {
+      return "just let this happen.";
+    }
+    
+    let textToMutate = text
+    while (!textToMutate || textToMutate.length < 50) {
+      // If we're not given valid text to mutate, just pick an answer we've received already and mutate that.
+      const receivedAnswers = game.getThing('saveDataManager').receivedAnswers;
+      textToMutate = Object.keys(receivedAnswers)[Math.floor(Object.keys(receivedAnswers).length * Math.random())];
+    }
+
+    let addedCount = 0
+    if (!textToMutate.includes("let this happen")) {
+      const r2 = " let this happen."
+      textToMutate = textToMutate.substring(0, textToMutate.length - r2.length) + r2;
+      addedCount ++
+    }
+
+    const rep = " let this happen ";
+    const midPoint = Math.floor(textToMutate.length * 0.6)
+
+    const pos1 = Math.floor(u.map(Math.random(), 0, 1, midPoint, textToMutate.length - (rep.length * 2 + 1)));
+    textToMutate = textToMutate.substring(0, pos1) + rep + textToMutate.substring(pos1 + rep.length)
+    addedCount ++
+
+    if (addedCount < count) {
+      const pos2 = Math.floor(u.map(Math.random(), 0, 1, 5, midPoint - (rep.length)));
+      textToMutate = textToMutate.substring(0, pos2) + rep + textToMutate.substring(pos2 + rep.length)
+      addedCount ++
+    }
+    
+    // Remove double spaces
+    while (textToMutate.includes("  ")) {
+      textToMutate = textToMutate.replaceAll("  ", " ")
+    }
+
+    return textToMutate;
+  }
+
+  creditsSequence() {
+    game.addThing(new Credits())
+    this.lockActions = true
   }
 
   getBlockShake() {
@@ -301,9 +403,8 @@ export default class UI extends Thing {
 
     if (unlockedWords > 4) {
       this.counterTime --
-      if (this.counterTime < 0) {
-        this.counterPos[1] = u.lerp(this.counterPos[1], 8, 0.1)
-      }
+      const desiredCounterPos = this.counterTime < 0 && (!this.isInEnding) ? 8 : -48;
+      this.counterPos[1] = u.lerp(this.counterPos[1], desiredCounterPos, 0.1)
     }
 
     let digits = [

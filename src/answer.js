@@ -3,7 +3,7 @@ import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
 import { APOSTRAPHE_SPACING, LETTER_SIZE, LETTER_SPACING, LINE_SPACING, WORD_SPACING } from './word.js'
-import { getLockedColor, GREY_OBTAINED } from './colors.js'
+import { getLockedColor, GREY_OBTAINED, RED_ERROR } from './colors.js'
 import LockParticle from './lockparticle.js'
 import Word from './word.js'
 import ShineParticle from './shineparticle.js'
@@ -90,6 +90,7 @@ export default class Answer extends Thing {
         hasLocks: knownWords[wordStr[i].word] ? false : !!locksCount,
         position: [pos + width/2, line * LINE_SPACING],
         width: width,
+        isEvil: game.getThing('ui').endingStage > 3,
       })
       knownWords[wordStr[i].word] = true
       pos += width
@@ -97,6 +98,23 @@ export default class Answer extends Thing {
         pos += WORD_SPACING
       }
     }
+
+    // Evil words
+    for (let i = 0; i < this.words.length - 2; i ++) {
+      if (
+        this.words[i].word === "let" &&
+        this.words[i+1].word === "this" &&
+        this.words[i+2].word === "happen"
+      ) {
+        this.words[i].isEvil = true;
+        this.words[i+1].isEvil = true;
+        this.words[i+2].isEvil = true;
+        this.preventSkipping = true
+      }
+    }
+
+    this.preventSkipping = this.words.some(x => x.isEvil);
+
     this.position = [...position]
 
     const { progressed, unlocked, timesSeen } = game.getThing('saveDataManager').receivedAnswer(text)
@@ -123,7 +141,8 @@ export default class Answer extends Thing {
     }
 
     // Sound effect
-    if (timesSeen === 1) {
+    const endingStage = game.getThing('ui').endingStage
+    if ((timesSeen === 1 || endingStage > 0) && endingStage < 100) {
       soundmanager.playSound('discover', 0.8, 0.7)
 
       const wordObjects = game.getThing('ui').selectedWords
@@ -134,15 +153,17 @@ export default class Answer extends Thing {
   }
 
   skip() {
-    if (this.animationPhase === 0) {
-      this.animationPhase = 1
-      
-      for (const word of this.words) {
-        word.wordDisplay = word.word
+    if (!this.preventSkipping) {
+      if (this.animationPhase === 0) {
+        this.animationPhase = 1
+        
+        for (const word of this.words) {
+          word.wordDisplay = word.word
+        }
       }
-    }
-    else if (this.animationPhase === 1) {
-      this.animationTime = this.animationEvents[0].time
+      else if (this.animationPhase === 1) {
+        this.animationTime = this.animationEvents[0].time
+      }
     }
   }
 
@@ -192,8 +213,12 @@ export default class Answer extends Thing {
           }
         }
 
-        if (this.talkPhase % 4 === 0) {
+        if (this.talkPhase % 4 === 0 || (this.talkPhase % 4 === 2 && curWord.isEvil)) {
           soundmanager.playSound('talk', 0.2, 0.3)
+          if (curWord.isEvil) {
+            soundmanager.playSound('hate', 0.4, 0.6)
+            soundmanager.playSound('hate2', 0.4, 1.0)
+          }
         }
         this.talkPhase ++
 
@@ -202,6 +227,9 @@ export default class Answer extends Thing {
         }
         else if ([',', ':', ';'].includes(writeChar)) {
           this.animationCharacterTime = 12
+        }
+        else if (curWord.isEvil) {
+          this.animationCharacterTime = 3
         }
         else {
           this.animationCharacterTime = 1
@@ -318,6 +346,9 @@ export default class Answer extends Thing {
           ctx.translate(LOCK_SPACING, 0)
         }
         ctx.restore()
+      }
+      if (word.isEvil) {
+        ctx.filter = RED_ERROR;
       }
 
       for (const char of word.wordDisplay) {
