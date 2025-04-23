@@ -1,21 +1,21 @@
 import * as game from 'game'
 import * as vec2 from 'vector2'
-import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
-import { BLUE_LOCKED, PINK_LOCKED } from './colors.js'
+import { getLockedColor } from './colors.js'
 
 export default class LockParticle extends Thing {
   position = [0, 0]
   velocity = [0, 0]
+  wordRarity = 0
 
-  constructor(position, isSpecial) {
+  constructor(position, wordRarity) {
     super()
 
     this.position = [...position]
     this.velocity = [
       (Math.random() - 0.5) * 10,
       -7 - (Math.random() * 4),
-      this.isSpecial = isSpecial
+      this.wordRarity = wordRarity
     ]
   }
 
@@ -36,7 +36,7 @@ export default class LockParticle extends Thing {
     
     ctx.translate(...this.position)
 
-    ctx.filter = this.isSpecial ? PINK_LOCKED : BLUE_LOCKED;
+    ctx.filter = getLockedColor(this.wordRarity)
     const img = game.assets.images["ui_lock_particle"]
     ctx.drawImage(img, 0, 0)
 

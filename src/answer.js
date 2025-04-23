@@ -3,9 +3,10 @@ import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
 import { APOSTRAPHE_SPACING, LETTER_SIZE, LETTER_SPACING, LINE_SPACING, WORD_SPACING } from './word.js'
-import { BLUE_LOCKED, GREY_OBTAINED, PINK_LOCKED } from './colors.js'
+import { getLockedColor, GREY_OBTAINED } from './colors.js'
 import LockParticle from './lockparticle.js'
 import Word from './word.js'
+import ShineParticle from './shineparticle.js'
 
 const LOCK_SPACING = 8
 
@@ -155,6 +156,24 @@ export default class Answer extends Thing {
       }
     }
 
+    // Rarity particles
+    for (const word of this.words) {
+      const wordRarity = game.assets.data.specialWords[word.word]
+      if (word.hasLocks && wordRarity) {
+        for (let i = 0; i < word.wordDisplay.length; i ++) {
+          if (
+            (wordRarity === 2 && Math.random() < 0.03) ||
+            (wordRarity !== 2 && Math.random() < 0.007)
+          ) {
+            const particleOffset = [(Math.random() * 48) - 8, (Math.random() * 48) - 8];
+            const particlePosition = vec2.add([(i * 26) - (word.width / 2), 0], vec2.add(word.position, this.position));
+            game.addThing(new ShineParticle(vec2.add(particlePosition, particleOffset), wordRarity));
+          }
+        }
+      }
+    }
+    
+
     if (this.animationPhase === 0) {
       this.animationCharacterTime --
 
@@ -202,14 +221,19 @@ export default class Answer extends Thing {
   
         if (animEvent.type === "progress") {
           const pos = vec2.add(vec2.add(this.position, word.position), this.getLockPosition(word, word.locks))
-          const isSpecial = game.assets.data.specialWords[word.word]
-          game.addThing(new LockParticle(pos, isSpecial))
-          game.addThing(new LockParticle(pos, isSpecial))
-          game.addThing(new LockParticle(pos, isSpecial))
-          game.addThing(new LockParticle(pos, isSpecial))
-          game.addThing(new LockParticle(pos, isSpecial))
-          game.addThing(new LockParticle(pos, isSpecial))
-          if (isSpecial) {
+          const wordRarity = game.assets.data.specialWords[word.word]
+          game.addThing(new LockParticle(pos, wordRarity))
+          game.addThing(new LockParticle(pos, wordRarity))
+          game.addThing(new LockParticle(pos, wordRarity))
+          game.addThing(new LockParticle(pos, wordRarity))
+          game.addThing(new LockParticle(pos, wordRarity))
+          game.addThing(new LockParticle(pos, wordRarity))
+          if (wordRarity === 2) {
+            soundmanager.playSound('break2', 0.4, [1.3, 1.7])
+            soundmanager.playSound('break5', 0.3, [1.2, 1.4])
+            soundmanager.playSound('break5', 0.3, [0.6, 0.7])
+          }
+          else if (wordRarity) {
             soundmanager.playSound('break2', 0.4, [1.3, 1.7])
             soundmanager.playSound('break5', 0.3, [1.2, 1.4])
           }
@@ -227,7 +251,12 @@ export default class Answer extends Thing {
             Math.random() * game.getHeight() * 0.25 + game.getWidth() * 0.125,
           ]))
           soundmanager.playSound('swipe', 0.9, 1.0)
-          if (game.assets.data.specialWords[word.word]) {
+          const wordRarity = game.assets.data.specialWords[word.word]
+          if (wordRarity === 2) {
+            soundmanager.playSound('newword2', 0.4, 0.93333)
+            soundmanager.playSound('newword3', 0.7, 1.1)
+          }
+          else if (wordRarity) {
             soundmanager.playSound('newword2', 0.4, 0.7)
           }
           else {
@@ -269,9 +298,12 @@ export default class Answer extends Thing {
       const locksRemaining = word.locks
       ctx.filter = GREY_OBTAINED;
       if (word.hasLocks) {
-        ctx.filter = game.assets.data.specialWords[word.word] ? PINK_LOCKED : BLUE_LOCKED;
-        ctx.save()
+        // Locked text color
+        const wordRarity = game.assets.data.specialWords[word.word]
+        ctx.filter = getLockedColor(wordRarity);
 
+        // Lock particles
+        ctx.save()
         let locksToDisplay = 0
         if (word.wordDisplay.length === word.word.length) {
           locksToDisplay = locksRemaining
@@ -285,9 +317,7 @@ export default class Answer extends Thing {
           ctx.drawImage(game.assets.images["ui_lock"], 0, 0)
           ctx.translate(LOCK_SPACING, 0)
         }
-
         ctx.restore()
-        
       }
 
       for (const char of word.wordDisplay) {

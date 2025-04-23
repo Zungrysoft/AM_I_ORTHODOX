@@ -22,7 +22,7 @@
     "war": { "count": 3, "types": ["noun"] },
     "reconstruction": { "count": 2, "types": ["noun"] },
     "stock": { "count": 3, "types": ["noun"] },
-    "trap": { "count": 1, "types": ["noun"] },
+    "trap": { "count": 2, "types": ["noun"] },
     "fight": { "count": 2, "types": ["verb"] },
     "inheritance": { "count": 2, "types": ["noun"] },
     "rich": { "count": 2, "types": ["noun", "adjective"] },
@@ -31,6 +31,7 @@
     "sedate": { "count": 1, "types": ["verb"] },
     "leave": { "count": 3, "types": ["verb"] },
     "dominate": { "count": 2, "types": ["verb"] },
+    "regulation": { "count": 2, "types": ["noun"] },
 
     "dead": { "count": 2, "types": ["adjective"] },
     "orthodox": { "count": 1, "types": ["adjective"] },

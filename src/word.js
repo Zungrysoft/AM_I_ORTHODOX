@@ -3,7 +3,7 @@ import * as u from 'utils'
 import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
-import { GREEN_HINT, PINK_LOCKED, RED_ERROR, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
+import { GREEN_HINT, RED_ERROR, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
 import SuccessParticle from './successparticle.js'
 import SmokeParticle from './smokeparticle.js'
 

@@ -83,6 +83,7 @@ game.assets.images = await game.loadImages({
   ui_lock_particle: 'images/ui_lock_particle.png',
   ui_success_particle: 'images/ui_success_particle.png',
   ui_smoke_particle: 'images/ui_smoke_particle.png',
+  ui_shine_particle: 'images/ui_shine_particle.png',
   ui_hint: 'images/ui_hint.png',
 })
 
@@ -103,6 +104,7 @@ game.assets.sounds = await game.loadAudio({
   impact1: 'sounds/impact1.wav',
   newword1: 'sounds/newword1.wav',
   newword2: 'sounds/newword2.wav',
+  newword3: 'sounds/newword3.wav',
   error: 'sounds/error.wav',
   block: 'sounds/block.wav',
   talk: 'sounds/talk.wav',
