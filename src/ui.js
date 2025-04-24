@@ -13,7 +13,7 @@ const BUTTON_MARGIN = 10
 const ERROR_DURATION = 25
 const BLOCK_DURATION = 15
 const MAX_WORDS = 5
-const HINT_TIME = 60 * 60 * 3
+const HINT_TIME = 60 * 60 * 2
 
 export default class UI extends Thing {
   sprite = 'ui_background'
