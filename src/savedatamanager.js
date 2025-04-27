@@ -224,7 +224,13 @@ export default class SaveDataManager extends Thing {
       // Clean outdated words from collection
       for (const word in this.wordProgress) {
         if (!(game.assets.data.words[word])) {
-          delete this.wordProgress[word]
+          delete this.wordProgress[word];
+        }
+      }
+      // Add new words to collection
+      for (const word in game.assets.data.words) {
+        if (!(word in this.wordProgress)) {
+          this.wordProgress[word] = game.assets.data.words[word].count;
         }
       }
     }
