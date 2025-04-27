@@ -17,7 +17,7 @@
     "was i orthodox": "no, you were a parasite.",
     "how was/am i hedonistic": "all you did after you got that inheritance was lay about. you said you never wanted to work another day in your life, which is the most selfish of all pursuits.",
     "why was/am i hedonistic": "i wish i knew. we both had the same upbringing, but i succeeded while you went on to do nothing worth mentioning.",
-    "was/am i hedonistic|how hedonistic am i": "nine years i watched you, while you lived a life devoid of purpose. someone of my standing could not sit idly by sharing a name with a non-worker. our world demands growth, not stagnation.",
+    "was/am i hedonistic|how hedonistic am i": "nine years i watched you, while you lived a life devoid of purpose. i was forced to sit idly by, sharing a name with a non-worker. our world demands growth, not stagnation.",
     "are you hedonistic": "my purpose is to make, not to consume. to dominate the competition, not to be content with my place.",
     "who is hedonistic": "non-workers, freeloaders, and bums. in other words, people like james.",
     "who is orthodox": "all of the great men of industry and those who answer when they are called to employ.",
@@ -210,7 +210,7 @@
 
     "did/do you know james": "i knew him, though we were not friends. i found his lack of orthodoxy offputting.",
     "did/do you hate james": "i did not hate him, but i did not respect him either. even if he had survived the war, it was a safe bet that he would not have accomplished much in his career.",
-    "did james hate you|mother": "i do not think he had it in him.",
+    "did james hate you/mother": "i do not think he had it in him.",
     "did/do i know james|did james know me|who is/was james": "you were best friends. i asked you several times why you liked him. you told me he was the only person in this world you knew you could trust.",
     "was/is james orthodox": "certainly not. unfortunately, i think that is why the two of you got along; you both dabbled in resisting the inevitable shift in america toward free market orthodoxy.",
     "was/is james hedonistic": "hedonism coursed through his veins. and it became worse as he got older, more rebellious.",
@@ -303,6 +303,7 @@
     "am i in thought reconstruction": "yes. we are performing it as we speak.",
     "is thought reconstruction orthodox": "the operation is designed to make orthodoxy out of a hedonist.",
     "is thought reconstruction safe": "it should be. i put great care into designing it. but even if the operation should go wrong, it would not be more than you deserve.",
+    "what is thought": "a constrained space through which to explore reality. sometimes too constrained. sometimes one can lead himself into a mental trap which he cannot escape without external assistance.",
 
     "are you dead": "i am right here at my desk, perfectly alive.",
     "are you here": "no. i am nine floors below you in my office. i am communicating to you directly through your brain waves.",

@@ -183,8 +183,8 @@ export default class Answer extends Thing {
       if (word.hasLocks && wordRarity) {
         for (let i = 0; i < word.wordDisplay.length; i ++) {
           if (
-            (wordRarity === 2 && Math.random() < 0.03) ||
-            (wordRarity !== 2 && Math.random() < 0.007)
+            (wordRarity === 2 && Math.random() < 0.02) ||
+            (wordRarity !== 2 && Math.random() < 0.004)
           ) {
             const particleOffset = [(Math.random() * 48) - 8, (Math.random() * 48) - 8];
             const particlePosition = vec2.add([(i * 26) - (word.width / 2), 0], vec2.add(word.position, this.position));
