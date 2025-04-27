@@ -220,6 +220,13 @@ export default class SaveDataManager extends Thing {
       this.wordProgress = readWordProgress;
       this.receivedAnswers = readReceivedAnswers;
       this.didEnding = didEnding ?? false
+
+      // Clean outdated words from collection
+      for (const word in this.wordProgress) {
+        if (!(game.assets.data.words[word])) {
+          delete this.wordProgress[word]
+        }
+      }
     }
     // Default values
     else {
