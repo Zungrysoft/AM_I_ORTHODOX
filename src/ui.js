@@ -233,7 +233,10 @@ export default class UI extends Thing {
         game.getThings().filter(x => x instanceof Answer).forEach(x => x.skip())
       }
     }
-    if (hintButton.clicked && showHintButton) {
+    if (
+      (hintButton.clicked && showHintButton) ||
+      (game.keysDown.ShiftLeft && game.keysPressed.KeyH)
+    ) {
       this.showHint()
     }
 
@@ -309,7 +312,11 @@ export default class UI extends Thing {
     this.lockActions = true
   }
 
-  showHint() {
+  showHint(apply=false) {
+    if (this.isInEnding || this.endingStage) {
+      return
+    }
+
     const saveDataManager = game.getThing('saveDataManager')
     let hintWords = new Set(saveDataManager.getHintWords())
 
@@ -324,7 +331,18 @@ export default class UI extends Thing {
 
     this.lastUnlockedWord = this.time
 
-    soundmanager.playSound('hint', 0.8, 1.2)
+    if (hintWords.size > 0) {
+      soundmanager.playSound('hint', 0.8, 1.2)
+    }
+
+    if (apply) {
+      const newSelectedWords = Array.from(hintWords).map(x => game.getThings().filter(w => w instanceof Word && w.word === x)[0])
+      if (newSelectedWords.every(x => x)) {
+        this.selectedWords = newSelectedWords
+        this.haveWordsChanged = true
+      }
+      
+    }
   }
 
   getBlockShake() {

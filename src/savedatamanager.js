@@ -327,11 +327,6 @@ export default class SaveDataManager extends Thing {
         this.writeToLocalStorage()
       }
 
-      // Cheat to skip the wait for a hint
-      if (game.keysPressed.KeyH) {
-        game.getThing('ui').showHint()
-      }
-
       // List all possible words
       if (game.keysPressed.KeyL) {
         let wordList = []
@@ -342,6 +337,13 @@ export default class SaveDataManager extends Thing {
         }
         const shuffledList = u.shuffle(wordList, Math.random)
         console.log(shuffledList.join("\n"))
+      }
+
+      // List not-yet-found responses
+      if (game.keysPressed.KeyK) {
+        const foundResponsesSet = new Set(Object.keys(this.receivedAnswers))
+        const allResponsesSet = new Set(Object.values(this.answers))
+        console.log(allResponsesSet.difference(foundResponsesSet))
       }
 
       // Trigger ending
