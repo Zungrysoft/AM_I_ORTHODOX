@@ -22,10 +22,7 @@ export default class UI extends Thing {
   wordBounds = [0, 0, game.getWidth(), game.getHeight() * 0.54]
   errorTime = 0
   blockTime = 0
-  answers = {}
   haveWordsChanged = true
-  counterPos = [game.getWidth() - 116, -48]
-  counterTime = 60
   lastUnlockedWord = 0
   time = 0
   endingStage = 0
@@ -60,55 +57,6 @@ export default class UI extends Thing {
       [128, 64]
     ))
 
-    for (const questionStart in game.assets.data.answers) {
-      // Some questions have | to allow multiple possible matches for the entire question
-      let questions = [questionStart]
-      if (questionStart.includes("|")) {
-        questions = questionStart.split("|")
-      }
-      for (const question of questions) {
-        // Some questions in the config file have / to allow multiple words
-        // This splits them into questions answers in the lookup dict
-        if (question.includes("/")) {
-          const splitAnswers = this.splitAnswer(question)
-          for (const splitAnswer of splitAnswers) {
-            this.addAnswer(splitAnswer, game.assets.data.answers[questionStart].toLowerCase())
-          }
-        }
-        else {
-          this.addAnswer(question, game.assets.data.answers[questionStart].toLowerCase())
-        }
-      }
-    }
-  }
-
-  addAnswer(question, answer) {
-    if (question in this.answers) {
-      console.warn(`Warning: duplicate question found: ${question}`)
-    }
-    this.answers[question] = answer
-  }
-
-  splitAnswer(answer) {
-    const answerWords = answer.split(" ")
-    return this.splitAnswerRecurse("", answerWords)
-  }
-
-  splitAnswerRecurse(soFar, answerWords) {
-    if (answerWords.length === 0) {
-      return [soFar.substring(0, soFar.length-1)]
-    }
-
-    if (answerWords[0].includes("/")) {
-      let ret = []
-      for (const word of answerWords[0].split("/")) {
-        ret.push(...this.splitAnswerRecurse(soFar + word + " ", answerWords.slice(1)))
-      }
-      return ret
-    }
-    else {
-      return this.splitAnswerRecurse(soFar + answerWords[0] + " ", answerWords.slice(1))
-    }
   }
 
   getAllWords() {
@@ -127,7 +75,7 @@ export default class UI extends Thing {
 
     const currentlyAnimating = game.getThings().some(x => x instanceof Answer && x.animationPhase < 2)
     const allowActions = !game.getThings().some(x => x instanceof Answer && x.animationEvents.length > 0) && !this.lockActions
-    const showHint = this.time - this.lastUnlockedWord > HINT_TIME && !this.isInEnding
+    const showHintButton = this.time - this.lastUnlockedWord > HINT_TIME && !this.isInEnding
 
     // Figure out which word the user should be acting on
     let activeWord = null
@@ -230,10 +178,10 @@ export default class UI extends Thing {
     const hintButton = game.getThing('hintButton')
     clearButton.enabled = this.selectedWords.length > 0
     sendButton.enabled = this.selectedWords.length > 0
-    hintButton.enabled = showHint
+    hintButton.enabled = showHintButton
     clearButton.greyedOut = !allowActions
     sendButton.greyedOut = !this.haveWordsChanged && !currentlyAnimating
-    hintButton.greyedOut = !showHint
+    hintButton.greyedOut = !showHintButton
     if ((clearButton.clicked || game.keysPressed.KeyC) && allowActions && this.selectedWords.length > 0) {
       this.selectedWords = []
       this.haveWordsChanged = true
@@ -243,7 +191,7 @@ export default class UI extends Thing {
       if (!currentlyAnimating) {
         if (allowActions) {
           const questionText = this.selectedWords.map(x => x.word).join(' ')
-          let answerText = this.answers[questionText] ?? null
+          let answerText = game.getThing('saveDataManager').answers[questionText] ?? null
 
           if (this.endingStage > 0 && this.endingStage < 7) {
             answerText = this.endingAnswerText(answerText, this.endingStage)
@@ -285,21 +233,8 @@ export default class UI extends Thing {
         game.getThings().filter(x => x instanceof Answer).forEach(x => x.skip())
       }
     }
-    if (hintButton.clicked && showHint) {
-      let hintWords = new Set(saveDataManager.getHintWords())
-
-      for (const wordObject of game.getThings().filter(x => x instanceof Word)) {
-        if (hintWords.has(wordObject.word)) {
-          wordObject.isHint = true
-        }
-        else {
-          wordObject.isHint = false
-        }
-      }
-
-      this.lastUnlockedWord = this.time
-
-      soundmanager.playSound('hint', 0.8, 1.2)
+    if (hintButton.clicked && showHintButton) {
+      this.showHint()
     }
 
     if (this.endingTime === 60 * 5) {
@@ -374,6 +309,24 @@ export default class UI extends Thing {
     this.lockActions = true
   }
 
+  showHint() {
+    const saveDataManager = game.getThing('saveDataManager')
+    let hintWords = new Set(saveDataManager.getHintWords())
+
+    for (const wordObject of game.getThings().filter(x => x instanceof Word)) {
+      if (hintWords.has(wordObject.word)) {
+        wordObject.isHint = true
+      }
+      else {
+        wordObject.isHint = false
+      }
+    }
+
+    this.lastUnlockedWord = this.time
+
+    soundmanager.playSound('hint', 0.8, 1.2)
+  }
+
   getBlockShake() {
     if (this.blockTime < 0) {
       return 0;
@@ -394,39 +347,6 @@ export default class UI extends Thing {
     ctx.save()
     const img = game.assets.images.ui_background
     ctx.drawImage(img, 0, 0)
-    ctx.restore()
-
-    // progress counter
-    ctx.save()
-    const unlockedWords = u.clamp(game.getThings().filter(x => x instanceof Word).length, 0, 99)
-    const totalWords = u.clamp(game.getThing('saveDataManager').totalWords, 0, 99)
-
-    if (unlockedWords > 4) {
-      this.counterTime --
-      const desiredCounterPos = this.counterTime < 0 && (!this.isInEnding) ? 8 : -48;
-      this.counterPos[1] = u.lerp(this.counterPos[1], desiredCounterPos, 0.1)
-    }
-
-    let digits = [
-      Math.floor(unlockedWords / 10) || 'clear',
-      unlockedWords % 10,
-      'slash',
-      Math.floor(totalWords / 10),
-      totalWords % 10,
-    ]
-
-    ctx.filter = GREY_OBTAINED
-    ctx.translate(...this.counterPos)
-
-    for (const digit of digits) {
-      if (digit !== 'clear') {
-        const img = game.assets.images['number_' + digit]
-        ctx.drawImage(img, 0, 0)
-      }
-      
-      ctx.translate(20, 0)
-    }
-
     ctx.restore()
     
   }

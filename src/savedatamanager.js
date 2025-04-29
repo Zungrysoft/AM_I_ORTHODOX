@@ -7,6 +7,7 @@ import Word from './word.js'
 export default class SaveDataManager extends Thing {
   wordProgress = {}
   receivedAnswers = {}
+  answers = {}
   gamePhase = 1
   isMusicEnabled = false
   totalWords = 0
@@ -16,6 +17,28 @@ export default class SaveDataManager extends Thing {
     super()
 
     game.setThingName(this, 'saveDataManager')
+
+    // Build answers list from answers.json config file
+    for (const questionStart in game.assets.data.answers) {
+      // Some questions have | to allow multiple possible matches for the entire question
+      let questions = [questionStart]
+      if (questionStart.includes("|")) {
+        questions = questionStart.split("|")
+      }
+      for (const question of questions) {
+        // Some questions in the config file have / to allow multiple words
+        // This splits them into questions answers in the lookup dict
+        if (question.includes("/")) {
+          const splitAnswers = this.splitAnswer(question)
+          for (const splitAnswer of splitAnswers) {
+            this.addAnswer(splitAnswer, game.assets.data.answers[questionStart].toLowerCase())
+          }
+        }
+        else {
+          this.addAnswer(question, game.assets.data.answers[questionStart].toLowerCase())
+        }
+      }
+    }
 
     this.readFromLocalStorage()
 
@@ -27,6 +50,35 @@ export default class SaveDataManager extends Thing {
           Math.random() * game.getHeight() * 0.35 + game.getHeight() * 0.1,
         ]))
       }
+    }
+  }
+  
+  addAnswer(question, answer) {
+    if (question in this.answers) {
+      console.warn(`Warning: duplicate question found: ${question}`)
+    }
+    this.answers[question] = answer
+  }
+
+  splitAnswer(answer) {
+    const answerWords = answer.split(" ")
+    return this.splitAnswerRecurse("", answerWords)
+  }
+
+  splitAnswerRecurse(soFar, answerWords) {
+    if (answerWords.length === 0) {
+      return [soFar.substring(0, soFar.length-1)]
+    }
+
+    if (answerWords[0].includes("/")) {
+      let ret = []
+      for (const word of answerWords[0].split("/")) {
+        ret.push(...this.splitAnswerRecurse(soFar + word + " ", answerWords.slice(1)))
+      }
+      return ret
+    }
+    else {
+      return this.splitAnswerRecurse(soFar + answerWords[0] + " ", answerWords.slice(1))
     }
   }
 
@@ -133,7 +185,7 @@ export default class SaveDataManager extends Thing {
   }
 
   getHintWords() {
-    const answers = game.getThing('ui').answers
+    const answers = this.answers
     let unlockedWords = new Set()
     let notUnlockedWords = new Set()
     for (const word in this.wordProgress) {
@@ -233,6 +285,14 @@ export default class SaveDataManager extends Thing {
           this.wordProgress[word] = game.assets.data.words[word].count;
         }
       }
+
+      // Clean outdated answers from collection
+      const allAnswers = new Set(Object.values(this.answers))
+      for (const answer in this.receivedAnswers) {
+        if (!(allAnswers.has(answer))) {
+          delete this.receivedAnswers[answer];
+        }
+      }
     }
     // Default values
     else {
@@ -269,7 +329,7 @@ export default class SaveDataManager extends Thing {
 
       // Cheat to skip the wait for a hint
       if (game.keysPressed.KeyH) {
-        game.getThing('ui').lastUnlockedWord = -99999
+        game.getThing('ui').showHint()
       }
 
       // List all possible words
@@ -291,7 +351,7 @@ export default class SaveDataManager extends Thing {
 
       // Run simulator
       if (game.keysPressed.KeyM) {
-        const answers = game.getThing('ui').answers
+        const answers = this.answers
         let wordCounts = {}
         Object.keys(game.assets.data.words).forEach(w => {
           wordCounts[w] = game.assets.data.words[w].count

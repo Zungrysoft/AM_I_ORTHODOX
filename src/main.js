@@ -7,6 +7,7 @@ import Thing from 'thing'
 import UI from './ui.js'
 import SaveDataManager from './savedatamanager.js'
 import MusicManager from './musicmanager.js'
+import WordCounter from './wordcounter.js'
 
 document.title = 'AM I ORTHODOX?'
 game.setWidth(1280)
@@ -119,10 +120,9 @@ game.assets.sounds = await game.loadAudio({
 })
 soundmanager.setSoundsTable(game.assets.sounds)
 
-
-
 game.setScene(() => {
   game.addThing(new SaveDataManager())
   game.addThing(new UI())
+  game.addThing(new WordCounter())
   game.addThing(new MusicManager())
 })

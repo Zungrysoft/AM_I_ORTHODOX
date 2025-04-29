@@ -4,8 +4,6 @@ import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
 import { GREEN_HINT, RED_ERROR, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
-import SuccessParticle from './successparticle.js'
-import SmokeParticle from './smokeparticle.js'
 
 export const LETTER_SPACING = 26
 export const APOSTRAPHE_SPACING = 10
@@ -159,16 +157,18 @@ export default class Word extends Thing {
           this.velocity[1] -= (aabb[3] - bounds[3]) * BOUND_CORRECTION_FORCE
         }
         // Progress counter
-        if (aabb[2] > bounds[2] - 116 && aabb[1] < bounds[1] + 40) {
-          const xDelta = aabb[2] - (bounds[2] - 116)
-          const yDelta = (bounds[1] + 40) - aabb[1]
-          if (xDelta < yDelta) {
-            this.velocity[0] -= xDelta * BOUND_CORRECTION_FORCE
+        if (game.getThing('wordCounter')?.isEnabled) {
+          if (aabb[2] > bounds[2] - 156 && aabb[1] < bounds[1] + 72) {
+            const xDelta = aabb[2] - (bounds[2] - 156)
+            const yDelta = (bounds[1] + 72) - aabb[1]
+            if (xDelta < yDelta) {
+              this.velocity[0] -= xDelta * BOUND_CORRECTION_FORCE
+            }
+            else {
+              this.velocity[1] += yDelta * BOUND_CORRECTION_FORCE
+            }
+            
           }
-          else {
-            this.velocity[1] += yDelta * BOUND_CORRECTION_FORCE
-          }
-          
         }
 
         this.driftChangeTime --
