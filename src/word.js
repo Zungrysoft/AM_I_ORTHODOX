@@ -4,6 +4,7 @@ import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
 import { GREEN_HINT, RED_ERROR, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
+import { drawSprite } from './draw.js'
 
 export const LETTER_SPACING = 26
 export const APOSTRAPHE_SPACING = 10
@@ -203,53 +204,56 @@ export default class Word extends Thing {
   }
 
   draw() {
-    const { ctx } = game
+    let translate = [0, 0];
+    let alpha = 1.0;
+    let color = [1.0, 1.0, 1.0];
     
-    ctx.save()
-    
-    ctx.translate(...this.position)
-    ctx.translate(...vec2.scale(this.getSize(), -0.5))
+    translate = vec2.add(translate, this.position);
+    translate = vec2.add(translate, vec2.scale(this.getSize(), -0.5));
 
     if (this.isDying) {
-      ctx.globalAlpha = Math.pow(Math.floor(this.dyingAlpha * 10) / 10, 1.3);
+      alpha = Math.pow(Math.floor(this.dyingAlpha * 10) / 10, 1.3);
     }
 
     if (this.flashTime >= this.flashOffset && this.flashTime < this.flashOffset + FLASH_DURATION) {
-      const flashPoint = this.flashTime - this.flashOffset
-      ctx.translate(0, Math.sin(Math.PI * (flashPoint / FLASH_DURATION)) * -28)
+      const flashPoint = this.flashTime - this.flashOffset;
+      translate[1] += Math.sin(Math.PI * (flashPoint / FLASH_DURATION)) * -28;
     }
     
     if (this.isSelected) {
       if (game.getThing('ui').errorTime > 0) {
-        ctx.filter = RED_ERROR;
+        color = RED_ERROR;
       }
       else {
-        ctx.filter = YELLOW_SELECTED;
+        color = YELLOW_SELECTED;
       }
 
       if (game.getThing('ui').blockTime > 0) {
         const shake = game.getThing('ui').getBlockShake();
-        ctx.translate(shake, 0);
+        translate = vec2.add(translate, [shake, 0]);
       }
     }
     else if (this.isHighlighted || this.isBeingDragged) {
-      ctx.filter = YELLOW_HIGHLIGHTED;
+      color = YELLOW_HIGHLIGHTED;
     }
 
     // Hint color overrides all
     if (this.isHint) {
-      ctx.filter = GREEN_HINT;
+      color = GREEN_HINT;
     }
 
     for (const char of this.word) {
       if (char === '_') {
         continue
       }
-      const img = game.assets.images["letter_" + char]
-      ctx.drawImage(img, 0, 0)
-      ctx.translate(LETTER_SPACING, 0)
+      const img = game.assets.textures["letter_" + char]
+      drawSprite({
+        sprite: img,
+        position: translate,
+        alpha: alpha,
+        color: color,
+      });
+      translate[0] += LETTER_SPACING;
     }
-
-    ctx.restore()
   }
 }

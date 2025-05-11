@@ -12,7 +12,7 @@ import WordCounter from './wordcounter.js'
 document.title = 'AM I ORTHODOX?'
 game.setWidth(1280)
 game.setHeight(720)
-game.createCanvas2D()
+game.createCanvases();
 const { ctx } = game
 ctx.save()
 ctx.fillStyle = 'white'
@@ -21,6 +21,7 @@ ctx.fillText('Loading...', 64, game.getHeight() - 64)
 ctx.restore()
 
 game.assets.images = await game.loadImages({
+  square: 'images/square.png',
   letter_0: 'images/letter_0.png',
   letter_1: 'images/letter_1.png',
   letter_2: 'images/letter_2.png',
@@ -119,6 +120,12 @@ game.assets.sounds = await game.loadAudio({
   music3: 'sounds/track3.flac',
 })
 soundmanager.setSoundsTable(game.assets.sounds)
+
+game.assets.textures = Object.fromEntries(
+  Object.entries(game.assets.images).map(([name, image]) => [
+    name, webgl.createTexture(image)
+  ])
+)
 
 game.setScene(() => {
   game.addThing(new SaveDataManager())

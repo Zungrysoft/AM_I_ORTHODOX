@@ -73,10 +73,8 @@ varying vec2 uv;
 varying vec3 normal;
 
 void main() {
-  vec4 result = texture2D(texture, uv) * color;
-  if (result.a == 0.0) { discard; }
-  result.rgb *= mix(0.25, 1.0, normal.z / 2.0 + 0.5);
-  result.rgb *= mix(1.0, 0.25, max(normal.x, 0.0));
+  vec4 result = color;
+  result.a = 1.0;
   gl_FragColor = result;
 }
 `
@@ -341,6 +339,14 @@ export function drawQuad (...points) {
     modifyMesh(quadMesh, quadVerts)
   }
   drawMesh(quadMesh, 'triangle_strip')
+}
+
+/**
+ * Draws a shader over the entire screen.
+ */
+export function drawScreen() {
+  // Draw the quad
+  drawQuad(-1, -1, 0, -1, 1, 0, 1, -1, 0, 1, 1, 0)
 }
 
 /**

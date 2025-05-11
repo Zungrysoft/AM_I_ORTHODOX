@@ -3,10 +3,11 @@ import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
 import { APOSTRAPHE_SPACING, LETTER_SIZE, LETTER_SPACING, LINE_SPACING, WORD_SPACING } from './word.js'
-import { getLockedColor, GREY_OBTAINED, RED_ERROR } from './colors.js'
+import { getLockedColor, GREEN_HINT, GREY_OBTAINED, RED_ERROR, WHITE, YELLOW_HIGHLIGHTED } from './colors.js'
 import LockParticle from './lockparticle.js'
 import Word from './word.js'
 import ShineParticle from './shineparticle.js'
+import { drawSprite } from './draw.js'
 
 const LOCK_SPACING = 8
 
@@ -301,37 +302,29 @@ export default class Answer extends Thing {
     let pos = [0, 0]
     pos[0] -= word.width/2
     pos[0] += (index - 1) * LOCK_SPACING
-    pos[0] += -LETTER_SPACING / 2
+    pos[0] += -LETTER_SPACING / 4
     pos[1] += 12
     return pos
   }
 
   draw() {
-    const { ctx } = game
-
     if (this.done) {
       return
     }
     
-    ctx.save()
-    
-    ctx.translate(...this.position)
+    const answerPos = [...this.position];
 
     for (const word of this.words) {
-      ctx.save()
-
-      ctx.translate(...word.position)
-      ctx.translate(-word.width/2, 0)
+      let wordPos = vec2.add(answerPos, vec2.add(word.position, [-word.width/2, 0]))
+      let color = GREY_OBTAINED;
 
       const locksRemaining = word.locks
-      ctx.filter = GREY_OBTAINED;
       if (word.hasLocks) {
         // Locked text color
         const wordRarity = game.assets.data.specialWords[word.word]
-        ctx.filter = getLockedColor(wordRarity);
+        color = getLockedColor(wordRarity);
 
         // Lock particles
-        ctx.save()
         let locksToDisplay = 0
         if (word.wordDisplay.length === word.word.length) {
           locksToDisplay = locksRemaining
@@ -340,15 +333,16 @@ export default class Answer extends Thing {
           locksToDisplay = Math.min(Math.floor(word.wordDisplay.length * 3), locksRemaining)
         }
 
-        ctx.translate(-LETTER_SPACING / 2, 12)
         for (let j = 0; j < locksToDisplay; j ++) {
-          ctx.drawImage(game.assets.images["ui_lock"], 0, 0)
-          ctx.translate(LOCK_SPACING, 0)
+          drawSprite({
+            sprite: game.assets.textures.ui_lock,
+            position: vec2.add(vec2.add(this.position, word.position), this.getLockPosition(word, j)),
+            color: color,
+          });
         }
-        ctx.restore()
       }
       if (word.isEvil) {
-        ctx.filter = RED_ERROR;
+        color = RED_ERROR;
       }
 
       for (const char of word.wordDisplay) {
@@ -384,21 +378,20 @@ export default class Answer extends Thing {
         else if (char === ':') {
           imgName = 'symbol_colon'
         }
-        const img = game.assets.images[imgName]
-        ctx.drawImage(img, 0, 0)
+        const img = game.assets.textures[imgName]
+        drawSprite({
+          sprite: img,
+          position: wordPos,
+          color: color,
+        });
 
         if (char === '\'') {
-          ctx.translate(APOSTRAPHE_SPACING, 0)
+          wordPos[0] += APOSTRAPHE_SPACING;
         }
         else {
-          ctx.translate(LETTER_SPACING, 0)
+          wordPos[0] += LETTER_SPACING;
         }
       }
-
-      ctx.restore()
     }
-    
-
-    ctx.restore()
   }
 }

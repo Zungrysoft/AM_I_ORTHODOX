@@ -3,6 +3,7 @@ import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
 import { RED_ERROR, YELLOW_SELECTED } from './colors.js'
+import { drawSprite } from './draw.js'
 
 export default class QuestionMark extends Thing {
   position = [0, 0]
@@ -41,29 +42,25 @@ export default class QuestionMark extends Thing {
   }
 
   draw() {
-    const { ctx } = game
-    
-    ctx.save()
-    
-    ctx.translate(...this.position)
-    ctx.translate(...vec2.scale(this.getSize(), -0.5))
-    ctx.translate(-20, 0)
+    let translate = vec2.add(this.position, vec2.add(vec2.scale(this.getSize(), -0.5), [-20, 0]));
+    let color = YELLOW_SELECTED;
 
-    ctx.filter = YELLOW_SELECTED;
     if (this.isSelected) {
       if (game.getThing('ui').errorTime > 0) {
-        ctx.filter = RED_ERROR;
+        color = RED_ERROR;
       }
 
       if (game.getThing('ui').blockTime) {
         const shake = game.getThing('ui').getBlockShake();
-        ctx.translate(shake, 0)
+        translate = vec2.add(translate, [shake, 0])
       }
     }
 
-    const img = game.assets.images["symbol_question_mark"]
-    ctx.drawImage(img, 0, 0)
-
-    ctx.restore()
+    const img = game.assets.textures.symbol_question_mark;
+    drawSprite({
+      sprite: img,
+      position: translate,
+      color: color,
+    });
   }
 }

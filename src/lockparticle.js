@@ -2,6 +2,7 @@ import * as game from 'game'
 import * as vec2 from 'vector2'
 import Thing from 'thing'
 import { getLockedColor } from './colors.js'
+import { drawSprite } from './draw.js'
 
 export default class LockParticle extends Thing {
   position = [0, 0]
@@ -30,16 +31,11 @@ export default class LockParticle extends Thing {
   }
 
   draw() {
-    const { ctx } = game
-    
-    ctx.save()
-    
-    ctx.translate(...this.position)
-
-    ctx.filter = getLockedColor(this.wordRarity)
-    const img = game.assets.images["ui_lock_particle"]
-    ctx.drawImage(img, 0, 0)
-
-    ctx.restore()
+    const img = game.assets.textures.ui_lock_particle
+    drawSprite({
+      sprite: img,
+      position: this.position,
+      color: getLockedColor(this.wordRarity),
+    });
   }
 }

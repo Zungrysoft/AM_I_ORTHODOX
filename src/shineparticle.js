@@ -2,6 +2,7 @@ import * as game from 'game'
 import * as vec2 from 'vector2'
 import Thing from 'thing'
 import { getLockedColor } from './colors.js'
+import { drawSprite } from './draw.js'
 
 export default class ShineParticle extends Thing {
   alpha = 1
@@ -20,7 +21,7 @@ export default class ShineParticle extends Thing {
   }
 
   update() {
-    this.angle += 0.1
+    this.angle += 0.3
 
     this.sizeVel -= this.sizeAccel
     this.size += this.sizeVel
@@ -31,21 +32,16 @@ export default class ShineParticle extends Thing {
   }
 
   draw() {
-    const { ctx } = game;
-
-    ctx.save();
-
-    const img = game.assets.images["ui_shine_particle"];
-    
-    ctx.filter = getLockedColor(this.wordRarity);
-    
-    ctx.translate(...this.position);
-    ctx.rotate(this.angle);
-
+    const img = game.assets.textures.ui_shine_particle;
     const size = Math.floor(32 * this.size);
-
-    ctx.drawImage(img, size * -0.5, size * -0.5, size, size);
-
-    ctx.restore()
+    drawSprite({
+      sprite: img,
+      position: this.position,
+      color: getLockedColor(this.wordRarity),
+      width: size,
+      height: size,
+      centered: true,
+      rotation: this.angle,
+    });
   }
 }

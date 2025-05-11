@@ -31,7 +31,7 @@ export default class SuccessParticle extends Thing {
     
     ctx.translate(...vec2.add(this.position, [-16, -16]))
 
-    ctx.filter = YELLOW_SELECTED;
+    // ctx.filter = YELLOW_SELECTED;
     ctx.globalAlpha = this.alpha;
     const img = game.assets.images["ui_success_particle"]
 

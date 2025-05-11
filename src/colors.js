@@ -1,11 +1,12 @@
-export const RED_ERROR = 'sepia(1) invert(1) saturate(100%) hue-rotate(120deg) brightness(30)';
-export const YELLOW_SELECTED = 'brightness(0) invert(1) sepia(1) saturate(50) hue-rotate(0deg)';
-export const YELLOW_HIGHLIGHTED = 'brightness(0) invert(1) sepia(1) saturate(10) hue-rotate(0deg)';
-export const GREY_OBTAINED = 'brightness(0.55)';
-export const BLUE_LOCKED = 'sepia(1) invert(1) saturate(40%) hue-rotate(0deg) brightness(100)';
-export const PINK_LOCKED = 'sepia(1) invert(1) hue-rotate(120deg) brightness(3000000%) saturate(30%) brightness(180%)';
-export const ORANGE_LOCKED = 'brightness(0) invert(1) sepia(1) saturate(50) hue-rotate(300deg) saturate(10)';
-export const GREEN_HINT = 'brightness(0) invert(1) sepia(1) saturate(50) hue-rotate(50deg)';
+export const WHITE = [1.0, 1.0, 1.0];
+export const RED_ERROR = [1.0, 0.0, 0.0];
+export const YELLOW_SELECTED = [1.0, 1.0, 0.0];
+export const YELLOW_HIGHLIGHTED = [1.0, 1.0, 0.41];
+export const GREY_OBTAINED = [0.55, 0.55, 0.55];
+export const BLUE_LOCKED = [0.39, 0.39, 1.0];
+export const PINK_LOCKED = [0.81, 0.27, 0.27];
+export const ORANGE_LOCKED = [1.0, 0.31, 0];
+export const GREEN_HINT = [0.26, 1.0, 0.27];
 
 export const getLockedColor = (type) => {
     if (type === 2) {

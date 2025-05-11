@@ -4,7 +4,7 @@
 export function getPerspective ({
   fov = 1.57,
   aspect = 1,
-  near = 1,
+  near = 0.01,
   far = 100_000,
   rightHanded = false
 } = {}) {
@@ -36,6 +36,37 @@ export function getPerspective ({
     -2 * far * near / (far - near),
     0
   ]
+}
+
+export function getOrthographic({
+  left = -1,
+  right = 1,
+  bottom = -1,
+  top = 1,
+  near = 0.01,
+  far = 100_000
+} = {}) {
+  return [
+    2 / (right - left),
+    0,
+    0,
+    0,
+
+    0,
+    2 / (top - bottom),
+    0,
+    0,
+
+    0,
+    0,
+    -2 / (far - near),
+    0,
+
+    -(right + left) / (right - left),
+    -(top + bottom) / (top - bottom),
+    -(far + near) / (far - near),
+    1
+  ];
 }
 
 /** Returns a transformation matrix. */

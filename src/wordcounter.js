@@ -4,6 +4,7 @@ import * as u from 'utils'
 import Thing from 'thing'
 import Word from './word.js'
 import { GREY_OBTAINED } from './colors.js'
+import { drawSprite } from './draw.js'
 
 export default class WordCounter extends Thing {
   enabledPosition = [game.getWidth() - 8 - 20, 8]
@@ -25,21 +26,20 @@ export default class WordCounter extends Thing {
     this.position = vec2.lerp(this.position, this.isEnabled ? this.enabledPosition : this.disabledPosition, 0.1)
   }
 
-  drawDigit = (ctx, digit) => {
+  drawDigit = (digit, position) => {
     if (digit !== 'clear') {
-      const img = game.assets.images['number_' + digit]
-      ctx.drawImage(img, 0, 0)
+      const img = game.assets.textures['number_' + digit]
+      drawSprite({
+        sprite: img,
+        position: position,
+        color: GREY_OBTAINED,
+      })
     }
   }
 
   draw() {
-    const { ctx } = game;
-
     const unlockedWords = game.getThings().filter(x => x instanceof Word).length
     const unlockedAnswers = Object.keys(game.getThing('saveDataManager').receivedAnswers).length
-
-    // progress counter
-    ctx.save()
 
     let digits1 = [
       ...unlockedAnswers.toString(),
@@ -53,27 +53,22 @@ export default class WordCounter extends Thing {
       ...this.totalWords.toString(),
     ]
 
-    ctx.filter = GREY_OBTAINED
-    ctx.translate(...this.position)
-
     // Top row
-    ctx.save()
-    for (let i = digits1.length - 1; i >=0; i --) {
-      this.drawDigit(ctx, digits1[i])
-      ctx.translate(-20, 0)
+    {
+      let digitPos = 0
+      for (let i = digits1.length - 1; i >=0; i --) {
+        this.drawDigit(digits1[i], vec2.add(this.position, [digitPos, 0]))
+        digitPos -= 20;
+      }
     }
-    ctx.restore()
-
-    ctx.translate(0, 32)
 
     // Bottom row
-    ctx.save()
-    for (let i = digits2.length - 1; i >=0; i --) {
-      this.drawDigit(ctx, digits2[i])
-      ctx.translate(-20, 0)
+    {
+      let digitPos = 0
+      for (let i = digits2.length - 1; i >=0; i --) {
+        this.drawDigit(digits2[i], vec2.add(this.position, [digitPos, 32]))
+        digitPos -= 20;
+      }
     }
-    ctx.restore()
-
-    ctx.restore()
   }
 }

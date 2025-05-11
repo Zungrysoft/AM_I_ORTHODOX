@@ -3,7 +3,8 @@ import * as vec2 from 'vector2'
 import * as u from 'utils'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
-import { GREY_OBTAINED, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
+import { GREY_OBTAINED, WHITE, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
+import { drawSprite } from './draw.js'
 
 export default class Button extends Thing {
   enabled = false
@@ -56,26 +57,26 @@ export default class Button extends Thing {
   }
 
   draw() {
-    const { ctx } = game
-    
-    ctx.save()
-    
-    ctx.translate(...this.position)
-    ctx.translate(...vec2.scale(this.size, -0.5))
+    let translate = vec2.add(this.position, vec2.scale(this.size, -0.5))
 
+    let color = WHITE;
     if (this.greyedOut) {
-      ctx.filter = GREY_OBTAINED;
+      color = GREY_OBTAINED;
     }
     else if (this.isClicked) {
-      ctx.filter = YELLOW_SELECTED;
+      color = YELLOW_SELECTED;
     }
     else if (this.isHighlighted) {
-      ctx.filter = YELLOW_HIGHLIGHTED;
+      color = YELLOW_HIGHLIGHTED;
     }
 
-    const img = game.assets.images[this.icon]
-    ctx.drawImage(img, 0, 0)
-
-    ctx.restore()
+    const img = game.assets.textures[this.icon]
+    drawSprite({
+      sprite: img,
+      position: translate,
+      color: color,
+      width: this.size[0],
+      height: this.size[1],
+    });
   }
 }

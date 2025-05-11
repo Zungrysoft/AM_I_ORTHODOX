@@ -34,6 +34,7 @@ export default class Scene {
     lookVector: [1, 0, 0],
     upVector: [0, 0, 1],
     rightHanded: false,
+    isOrtho: false,
     viewMatrix: mat.getView(),
     projectionMatrix: mat.getPerspective(),
     setUniforms () {
@@ -41,7 +42,8 @@ export default class Scene {
       gfx.set('projectionMatrix', this.projectionMatrix)
     },
     updateMatrices () {
-      this.projectionMatrix = mat.getPerspective({
+      const perspectiveFunction = this.isOrtho ? mat.getOrthographic : mat.getPerspective
+      this.projectionMatrix = perspectiveFunction({
         aspect: game.getWidth() / game.getHeight(),
         fov: this.fov,
         near: this.near,

@@ -1,6 +1,9 @@
 import * as game from 'game'
 import * as u from 'utils'
+import * as vec3 from 'vector3'
 import * as soundmanager from 'soundmanager'
+import * as matrix from 'matrices'
+import * as webgl from 'webgl'
 import Thing from 'thing'
 import Word, { WORD_SPACING } from './word.js'
 import QuestionMark from './questionmark.js'
@@ -8,6 +11,7 @@ import Button from './button.js'
 import Answer from './answer.js'
 import { GREY_OBTAINED } from './colors.js'
 import Credits from './credits.js'
+import { drawBackground, drawSprite } from './draw.js'
 
 const BUTTON_MARGIN = 10
 const ERROR_DURATION = 25
@@ -56,6 +60,13 @@ export default class UI extends Thing {
       'sendButton',
       [128, 64]
     ))
+
+    game.getCamera3D().lookVector = [0, 0, -1];
+    game.getCamera3D().upVector = [0, 1, 0];
+    game.getCamera3D().near = 0.01;
+    game.getCamera3D().isOrtho = true;
+    game.getCamera3D().updateMatrices();
+    game.getCamera3D().setUniforms();
 
   }
 
@@ -237,7 +248,7 @@ export default class UI extends Thing {
       (hintButton.clicked && showHintButton) ||
       (game.keysDown.ShiftLeft && game.keysPressed.KeyH)
     ) {
-      this.showHint()
+      this.showHint(true)
     }
 
     if (this.endingTime === 60 * 5) {
@@ -352,20 +363,14 @@ export default class UI extends Thing {
     return (this.blockTime / ERROR_DURATION) * 10 * Math.sin(this.blockTime / 1.4)
   }
 
-  preDraw() {
+  draw() {
     const { ctx } = game
 
     // background
-    ctx.save()
-    ctx.fillStyle = 'rgba(0, 0, 0, 1)'
-    ctx.fillRect(0, 0, game.getWidth(), game.getHeight())
-    ctx.restore()
+    drawBackground({ depth: 100000, color: [0.0, 0.0, 0.0] });
 
     // divider
-    ctx.save()
-    const img = game.assets.images.ui_background
-    ctx.drawImage(img, 0, 0)
-    ctx.restore()
+    drawBackground({ sprite: game.assets.textures.ui_background, depth: 100000 - 1 });
     
   }
 }
