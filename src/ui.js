@@ -60,14 +60,6 @@ export default class UI extends Thing {
       'sendButton',
       [128, 64]
     ))
-
-    game.getCamera3D().lookVector = [0, 0, -1];
-    game.getCamera3D().upVector = [0, 1, 0];
-    game.getCamera3D().near = 0.01;
-    game.getCamera3D().isOrtho = true;
-    game.getCamera3D().updateMatrices();
-    game.getCamera3D().setUniforms();
-
   }
 
   getAllWords() {
@@ -246,7 +238,7 @@ export default class UI extends Thing {
     }
     if (
       (hintButton.clicked && showHintButton) ||
-      (game.keysDown.ShiftLeft && game.keysPressed.KeyH)
+      (game.keysPressed.KeyH)
     ) {
       this.showHint(true)
     }
@@ -363,14 +355,12 @@ export default class UI extends Thing {
     return (this.blockTime / ERROR_DURATION) * 10 * Math.sin(this.blockTime / 1.4)
   }
 
-  draw() {
-    const { ctx } = game
-
+  preDraw() {
     // background
-    drawBackground({ depth: 100000, color: [0.0, 0.0, 0.0] });
+    drawBackground({ depth: 1, color: [0.0, 0.0, 0.0] });
 
     // divider
-    drawBackground({ sprite: game.assets.textures.ui_background, depth: 100000 - 1 });
+    drawBackground({ sprite: game.assets.textures.ui_background, depth: 2 });
     
   }
 }

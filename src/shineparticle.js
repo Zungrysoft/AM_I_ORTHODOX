@@ -8,7 +8,7 @@ export default class ShineParticle extends Thing {
   alpha = 1
   position = [0, 0]
   velocity = [0, 0]
-  depth = -100
+  depth = 2
 
   constructor(position, wordRarity, scale = 1.2) {
     super()
@@ -42,6 +42,7 @@ export default class ShineParticle extends Thing {
       height: size,
       centered: true,
       rotation: this.angle,
+      depth: this.depth,
     });
   }
 }

@@ -8,6 +8,7 @@ import UI from './ui.js'
 import SaveDataManager from './savedatamanager.js'
 import MusicManager from './musicmanager.js'
 import WordCounter from './wordcounter.js'
+import CameraManager from './cameramanager.js'
 
 document.title = 'AM I ORTHODOX?'
 game.setWidth(1280)
@@ -132,4 +133,5 @@ game.setScene(() => {
   game.addThing(new UI())
   game.addThing(new WordCounter())
   game.addThing(new MusicManager())
+  game.addThing(new CameraManager())
 })

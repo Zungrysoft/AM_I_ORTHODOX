@@ -1,12 +1,7 @@
 import * as game from 'game'
-import * as u from 'utils'
-import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
-import Word, { WORD_SPACING } from './word.js'
-import QuestionMark from './questionmark.js'
-import Button from './button.js'
 import Answer from './answer.js'
-import { GREY_OBTAINED } from './colors.js'
+import { drawBackground } from './draw.js'
 
 export default class Credits extends Thing {
   depth = 100000
@@ -29,14 +24,11 @@ export default class Credits extends Thing {
   }
 
   draw() {
-    const { ctx } = game
-
     // background
-    ctx.save()
-    ctx.globalAlpha = Math.pow(Math.floor(this.drawAlpha * 10) / 10, 0.7);
-    ctx.fillStyle = 'rgba(0, 0, 0, 1)'
-    ctx.fillRect(0, 0, game.getWidth(), game.getHeight())
-    ctx.restore()
-
+    drawBackground({
+      color: [0.0, 0.0, 0.0],
+      alpha: Math.pow(Math.floor(this.drawAlpha * 10) / 10, 0.7),
+      depth: this.depth,
+    });
   }
 }

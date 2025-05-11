@@ -3,7 +3,7 @@ import * as u from 'utils'
 import * as vec2 from 'vector2'
 import * as soundmanager from 'soundmanager'
 import Thing from 'thing'
-import { GREEN_HINT, RED_ERROR, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
+import { GREEN_HINT, RED_ERROR, WHITE, YELLOW_HIGHLIGHTED, YELLOW_SELECTED } from './colors.js'
 import { drawSprite } from './draw.js'
 
 export const LETTER_SPACING = 26
@@ -36,6 +36,7 @@ export default class Word extends Thing {
   isHint = false
   isDying = false
   dyingAlpha = 1.0
+  depth = 5
 
   constructor(word, position, originalPosition) {
     super()
@@ -206,7 +207,7 @@ export default class Word extends Thing {
   draw() {
     let translate = [0, 0];
     let alpha = 1.0;
-    let color = [1.0, 1.0, 1.0];
+    let color = WHITE;
     
     translate = vec2.add(translate, this.position);
     translate = vec2.add(translate, vec2.scale(this.getSize(), -0.5));
@@ -250,8 +251,9 @@ export default class Word extends Thing {
       drawSprite({
         sprite: img,
         position: translate,
-        alpha: alpha,
         color: color,
+        alpha: alpha,
+        depth: this.depth,
       });
       translate[0] += LETTER_SPACING;
     }

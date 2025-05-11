@@ -20,7 +20,7 @@ export function drawSprite({
     position: [
       u.map(position[0] + (centered ? 0 : width/2), 0, game.getWidth(), -1, 1),
       u.map(position[1] + (centered ? 0 : height/2), 0, game.getHeight(), 1, -1),
-      -depth,
+      convertDepth(depth),
     ],
     scale: [width / game.getWidth(), -height / game.getHeight(), 1.0],
     rotation: [0, rotation, 0],
@@ -40,9 +40,19 @@ export function drawBackground({
   webgl.setTexture(dSprite)
   webgl.set('color', [...color, alpha])
   webgl.set('modelMatrix', matrix.getTransformation({
-    position: [0, 0, -depth],
+    position: [0, 0, convertDepth(depth)],
     scale: [1.0, -1.0, 1.0],
   }))
 
   webgl.drawScreen()
+}
+
+function convertDepth(depth) {
+  const near = game.getCamera3D().near;
+  const far = game.getCamera3D().far;
+
+  if (depth <= 0) {
+    return far
+  }
+  return -(near + (1.0 / depth) * (far - near));
 }

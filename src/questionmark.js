@@ -9,6 +9,7 @@ export default class QuestionMark extends Thing {
   position = [0, 0]
   originalPosition = [0, 0]
   selectedPosition = [0, 0]
+  depth = 4
 
   constructor(position) {
     super()
@@ -61,6 +62,7 @@ export default class QuestionMark extends Thing {
       sprite: img,
       position: translate,
       color: color,
+      depth: this.depth,
     });
   }
 }

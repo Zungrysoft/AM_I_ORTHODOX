@@ -8,6 +8,7 @@ export default class LockParticle extends Thing {
   position = [0, 0]
   velocity = [0, 0]
   wordRarity = 0
+  depth = 2
 
   constructor(position, wordRarity) {
     super()
@@ -36,6 +37,7 @@ export default class LockParticle extends Thing {
       sprite: img,
       position: this.position,
       color: getLockedColor(this.wordRarity),
+      depth: this.depth,
     });
   }
 }

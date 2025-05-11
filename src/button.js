@@ -12,6 +12,7 @@ export default class Button extends Thing {
   positionEnabled = [0, 0]
   positionDisabled = [0, 0]
   size = [64, 64]
+  depth = 10
 
   constructor(positionDisabled, positionEnabled, icon, thingName, size=[64, 64]) {
     super()
@@ -77,6 +78,7 @@ export default class Button extends Thing {
       color: color,
       width: this.size[0],
       height: this.size[1],
+      depth: this.depth,
     });
   }
 }

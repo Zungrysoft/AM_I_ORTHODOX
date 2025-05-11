@@ -24,6 +24,7 @@ export default class Answer extends Thing {
   animationEvents = []
   animationTime = 0
   talkPhase = 0
+  depth = 3
 
   constructor(text, position) {
     super()
@@ -338,6 +339,7 @@ export default class Answer extends Thing {
             sprite: game.assets.textures.ui_lock,
             position: vec2.add(vec2.add(this.position, word.position), this.getLockPosition(word, j)),
             color: color,
+            depth: this.depth,
           });
         }
       }
@@ -383,6 +385,7 @@ export default class Answer extends Thing {
           sprite: img,
           position: wordPos,
           color: color,
+          depth: this.depth,
         });
 
         if (char === '\'') {

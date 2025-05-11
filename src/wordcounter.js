@@ -10,7 +10,7 @@ export default class WordCounter extends Thing {
   enabledPosition = [game.getWidth() - 8 - 20, 8]
   disabledPosition = [game.getWidth() - 8 - 20, -80]
   isEnabled = false
-  depth = -1
+  depth = 2
 
   constructor() {
     super()
@@ -33,6 +33,7 @@ export default class WordCounter extends Thing {
         sprite: img,
         position: position,
         color: GREY_OBTAINED,
+        depth: this.depth,
       })
     }
   }
