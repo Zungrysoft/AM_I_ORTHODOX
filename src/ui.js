@@ -240,7 +240,7 @@ export default class UI extends Thing {
       (hintButton.clicked && showHintButton) ||
       (game.keysPressed.KeyH)
     ) {
-      this.showHint(true)
+      this.showHint()
     }
 
     if (this.endingTime === 60 * 5) {
